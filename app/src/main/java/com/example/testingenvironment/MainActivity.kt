@@ -2,6 +2,7 @@ package com.example.testingenvironment
 
 import android.Manifest
 import android.app.Activity
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -55,10 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
-            //val thumbnail: Bitmap = data.getParcelableExtra("data")
-            val fullPhotoUri: Uri? = data!!.data
-            printImageWithGlide(this, fullPhotoUri, this.findViewById<ImageView>(R.id.show_picture_imageview))
-            // Do work with photo saved at fullPhotoUri
+            oneOrMultiple(data)
         }
     }
 
@@ -73,6 +71,23 @@ class MainActivity : AppCompatActivity() {
             .into(imgView)
     }
 
+    fun oneOrMultiple(data: Intent?){
+        if (data != null){
+            showToast("He llegado")
+            var text: String = ""
+            var data: ClipData = data.clipData!!
+                for (i in 0 until data.itemCount){
+                    var carro = data.getItemAt(i).uri
+                    //printImageWithGlide(this, carro , this.findViewById<ImageView>(R.id.show_picture_imageview))
+                    text = "numero ${data.itemCount} de tipo  ${carro is Uri}"
+                }
+            showToast(text)
+        }
+    }
+
 }
+
+
+
 
 
