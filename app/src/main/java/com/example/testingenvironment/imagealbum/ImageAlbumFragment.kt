@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
@@ -115,7 +116,14 @@ class ImageAlbumFragment : Fragment() {
                 imageList.add(i, item)
                 //printImageWithGlide(this, carro , this.findViewById<ImageView>(R.id.show_picture_imageview))
             }
+            viewModel.imageUriList.value = imageList
         }
+    }
+
+    fun setUpObservers(){
+        viewModel.imageUriList.observe(this, Observer { imageUriList ->
+            //give list to the database
+        })
     }
 
 }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.testingenvironment.R
 import com.example.testingenvironment.databinding.DetailFragmentBinding
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
@@ -27,6 +28,8 @@ class ImageListFragment : Fragment() {
     ): View? {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.image_list_fragment, container, false)
+
+        binding.imageListRecycleView.layoutManager = GridLayoutManager(context, 2)
 
         return inflater.inflate(R.layout.image_list_fragment, container, false)
     }
