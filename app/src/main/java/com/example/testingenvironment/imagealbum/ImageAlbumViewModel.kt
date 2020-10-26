@@ -1,14 +1,20 @@
 package com.example.testingenvironment.imagealbum
 
-import android.net.Uri
-import androidx.lifecycle.LiveData
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.testingenvironment.database.ImageUriDatabaseDao
+import kotlinx.coroutines.Job
 
-class ImageAlbumViewModel : ViewModel() {
+class ImageAlbumViewModel(
+    private val dataSource: ImageUriDatabaseDao,
+    private val application: Application
+) : ViewModel(
 
-    val imageUriList = MutableLiveData<MutableList<Uri>>()
+) {
 
+    val imageUriList = MutableLiveData<List<String>>()
+    private var viewModelJob = Job()
 
     init {
 
@@ -17,5 +23,10 @@ class ImageAlbumViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
+        viewModelJob.cancel()
+    }
+
+    fun insertImageListToDatabase(){
+
     }
 }
