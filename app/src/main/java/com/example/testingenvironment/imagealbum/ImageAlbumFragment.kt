@@ -15,18 +15,15 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.testingenvironment.R
 import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
-import kotlinx.android.synthetic.main.image_list_fragment.*
 
 
 const val REQUEST_IMAGE_GET = 101
@@ -41,23 +38,12 @@ class ImageAlbumFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        /*binding = DataBindingUtil.inflate<ImageAlbumFragmentBinding>(
-            inflater,
-            R.layout.image_album_fragment,
-            container,
-            false
-        )*/
-
         binding = ImageAlbumFragmentBinding.inflate(inflater)
 
         setOnClickListener()
         buttonNavToImageList()
 
         binding.lifecycleOwner = this
-
-
-
-
 
         //require not null is a kotlin function that throws an illegal argument exception if the value is null
 
@@ -82,14 +68,11 @@ class ImageAlbumFragment : Fragment() {
         binding.albumList.adapter = ImageAlbumRecyclerViewAdapter()
 
         //showToast("Hay ${viewModel.albumList.value?.size} elementos en la lista")
-
-        setUpObservers()
     }
 
-    fun setOnClickListener() {
+    private fun setOnClickListener() {
         binding.getImageButton.setOnClickListener { view ->
             selectImage()
-
         }
 
         binding.fab.setOnClickListener { view ->
@@ -99,29 +82,29 @@ class ImageAlbumFragment : Fragment() {
         }
     }
 
-    fun buttonNavToImageList(){
+    private fun buttonNavToImageList(){
         binding.toImageListButton.setOnClickListener { view ->
             view.findNavController().navigate(R.id.action_imageAlbumFragment_to_imageListFragment)
         }
     }
 
-    fun showToast(text: String) {
+    private fun showToast(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-    fun showToast(text: Int) {
+    private fun showToast(text: Int) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-    fun createIntent(action: String, typeString: String): Intent {
+    private fun createIntent(action: String, typeString: String): Intent {
         return Intent(action).apply {
             type = typeString
         }
     }
 
 
-    fun selectImage() {
-        var intent = createIntent(Intent.ACTION_GET_CONTENT, "image/*")
+    private fun selectImage() {
+        val intent = createIntent(Intent.ACTION_GET_CONTENT, "image/*")
             .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         //if (intent.resolveActivity(packageManager) != null) {
         startActivityForResult(intent, REQUEST_IMAGE_GET)
@@ -159,24 +142,17 @@ class ImageAlbumFragment : Fragment() {
         }
     }
 
-    fun setUpObservers(){
-        viewModel.albumList.observe(viewLifecycleOwner, Observer {
-            //viewModel.loadAlbumsIntoList()
-            Log.i("Yes", "YEE")
-        })
-    }
-
-    fun createNewAlbumAlertDialog(){
-        var et_folder = createFolderEditText()
-        if (et_folder.parent != null) {
-            (et_folder.parent as ViewGroup).removeView(et_folder) // esto soluciona el problema java.lang.IllegalStateException: The specified child already has a parent. You must call removeView() on the child's parent first.
+    private fun createNewAlbumAlertDialog(){
+        val etFolder = createFolderEditText()
+        if (etFolder.parent != null) {
+            (etFolder.parent as ViewGroup).removeView(etFolder) // esto soluciona el problema java.lang.IllegalStateException: The specified child already has a parent. You must call removeView() on the child's parent first.
         }
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(true)
         builder.setTitle(getString(R.string.newgroup))
         builder.setMessage(getString(R.string.entername))
-        builder.setView(et_folder)
+        builder.setView(etFolder)
         builder.setNegativeButton(
             getString(R.string.cancel)
         ) { dialogInterface, i ->
@@ -185,7 +161,7 @@ class ImageAlbumFragment : Fragment() {
         }.setPositiveButton(
             getString(R.string.accept)
         ) { dialogInterface, i ->
-            val name = et_folder.text.toString().trim { it <= ' ' }
+            val name = etFolder.text.toString().trim { it <= ' ' }
             viewModel.saveAlbumIntoDatabase(name)
             dialogInterface.cancel()
         }
