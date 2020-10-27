@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+                name="album"
+                type="com.example.testingenvironment.database.Album"/>
+        <variable
+                name="clickListener"
+                type="com.example.testingenvironment.imagealbum.AlbumListener"/>
+    </data>
+        <TextView
+                android:text="@{album.name}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/name_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.022"
+                tools:text= "TEST"
+                android:textSize="36sp" android:textColor="#121111"/>
+</layout>
