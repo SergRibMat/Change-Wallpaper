@@ -13,7 +13,7 @@ import com.example.testingenvironment.R
 import com.example.testingenvironment.database.Album
 import com.example.testingenvironment.databinding.ImageAlbumItemBinding
 
-class ImageAlbumRecyclerViewAdapter : ListAdapter<Album, ItemViewHolder>(DiffCallback) {
+class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdapter<Album, ItemViewHolder>(DiffCallback) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -22,7 +22,7 @@ class ImageAlbumRecyclerViewAdapter : ListAdapter<Album, ItemViewHolder>(DiffCal
 
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), clickListener)
     }
 
     companion object DiffCallback :
@@ -41,9 +41,10 @@ class ImageAlbumRecyclerViewAdapter : ListAdapter<Album, ItemViewHolder>(DiffCal
 class ItemViewHolder constructor(val binding: ImageAlbumItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
-    fun bind(album: Album) {
+    fun bind(album: Album, clickListener: AlbumListener) {
         binding.album = album
         //binding.album = Album("Sergio", 1)
+        binding.clickListener = clickListener
         binding.executePendingBindings()//use always this line when using bindings and recyclerViews
     }
 

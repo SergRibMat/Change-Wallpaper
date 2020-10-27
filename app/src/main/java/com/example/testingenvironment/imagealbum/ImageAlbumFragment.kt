@@ -65,7 +65,13 @@ class ImageAlbumFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        binding.albumList.adapter = ImageAlbumRecyclerViewAdapter()
+        binding.albumList.adapter = ImageAlbumRecyclerViewAdapter(AlbumListener { albumGroup: Int ->
+            showToast("El id es $albumGroup")
+            //1- este listener le dara algo al viewModel
+            //2- el viewmodel cambiara un valor que hay en un livedata
+            //el observe que apunta a ese live data accionara el codigo de navegacion con el dato en cueston
+
+        })
 
         //showToast("Hay ${viewModel.albumList.value?.size} elementos en la lista")
     }
