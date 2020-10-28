@@ -9,7 +9,9 @@
               android:name="com.example.testingenvironment.detail.DetailFragment"
               android:label="Detail Fragment"
               tools:layout="@layout/detail_fragment"
-    />
+    >
+        <argument android:name="ImageUri" app:argType="com.example.testingenvironment.database.ImageUri"/>
+    </fragment>
     <fragment android:id="@+id/imageAlbumFragment"
               android:name="com.example.testingenvironment.imagealbum.ImageAlbumFragment"
               android:label="Image Album Fragment"

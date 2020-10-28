@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.testingenvironment.R
 import com.example.testingenvironment.databinding.DetailFragmentBinding
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
+import com.example.testingenvironment.imagelist.ImageListFragmentArgs
 
 class DetailFragment : Fragment() {
 
@@ -31,6 +33,17 @@ class DetailFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         // TODO: Use the ViewModel
+
+        val args = DetailFragmentArgs.fromBundle(requireArguments())
+        showToast("Nombre objeto= ${args.ImageUri.name} y path ${args.ImageUri.pathToImage}")
+    }
+
+    private fun showToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showToast(text: Int) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
 }

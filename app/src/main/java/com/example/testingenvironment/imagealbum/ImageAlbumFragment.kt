@@ -76,7 +76,7 @@ class ImageAlbumFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.getImageButton.setOnClickListener { view ->
-            selectImage()
+            //selectImage()
         }
 
         binding.fab.setOnClickListener { view ->
@@ -109,27 +109,7 @@ class ImageAlbumFragment : Fragment() {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-    private fun createIntent(action: String, typeString: String): Intent {
-        return Intent(action).apply {
-            type = typeString
-        }
-    }
 
-
-    private fun selectImage() {
-        val intent = createIntent(Intent.ACTION_GET_CONTENT, "image/*")
-            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        //if (intent.resolveActivity(packageManager) != null) {
-        startActivityForResult(intent, REQUEST_IMAGE_GET)
-        //}
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
-            oneOrMultiple(data)
-        }
-    }
 
     fun printImageWithGlide(context: Context, imgUri: Uri?, imgView: ImageView) {
         Glide.with(context)
