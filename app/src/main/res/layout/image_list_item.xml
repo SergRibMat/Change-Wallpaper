@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:padding="6dp"
+        android:onClick="@{() -> clickListener.onClick(imageUri)}">
+
+    <data>
+        <variable
+                name="imageUri"
+                type="com.example.testingenvironment.database.ImageUri"/>
+
+        <variable
+                name="clickListener"
+                type="com.example.testingenvironment.imagelist.ImageUriClickListener"/>
+    </data>
+
+    <TextView
+            android:text="@{imageUri.name}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name_tv"
+            tools:text="TEST"
+            android:onClick="@{() -> clickListener.onClick(imageUri)}"
+            android:textColor="#151313"
+            android:textSize="36sp"/>
+</layout>

@@ -19,8 +19,21 @@ class ImageListViewModel : ViewModel() {
 
 
     init {
-        _imageList.value = null
+        //_imageList.value = null
+        initTestImageList()
         _navigateToDetail.value = null
+    }
+
+    private fun initTestImageList() {
+        _imageList.value = listOf(
+            ImageUri(1, "Sergio", "path", 4),
+            ImageUri(1, "Ribera", "path", 4),
+            ImageUri(1, "Mateu", "path", 4),
+            ImageUri(1, "Juan", "path", 4),
+            ImageUri(1, "Conchin", "path", 4),
+            ImageUri(1, "Silvia", "path", 4)
+
+        )
     }
 
     //1-añadir la lista de imagenes a la base de datos

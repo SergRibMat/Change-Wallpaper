@@ -37,12 +37,10 @@ class ImageListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.image_list_fragment, container, false)
+        binding = ImageListFragmentBinding.inflate(inflater)
 
 
         val args = ImageListFragmentArgs.fromBundle(requireArguments())
-
-        showToast("Name= ${args.album.name} y albumGroup= ${args.album.albumGroup}")
 
         setButtonListeners()
         toDetailListener()
@@ -55,6 +53,12 @@ class ImageListFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ImageListViewModel::class.java)
 
         declareObservers()
+
+        binding.viewModel = viewModel
+
+        binding.imageListGrid.adapter = ImageListRecycleViewAdapter(ImageUriClickListener { imageUri ->
+            viewModel.navigateToDetailFragment(imageUri)
+        })
     }
 
 
@@ -80,7 +84,7 @@ class ImageListFragment : Fragment() {
 
     fun toDetailListener(){
         binding.navToDetailBtn.setOnClickListener {
-            viewModel.navigateToDetailFragment(ImageUri(1, "Sergio", "path", 4))
+            //viewModel.navigateToDetailFragment(ImageUri(1, "Sergio", "path", 4))
         }
     }
 
