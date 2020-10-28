@@ -17,6 +17,7 @@
     >
         <action android:id="@+id/action_imageAlbumFragment_to_imageListFragment"
                 app:destination="@id/imageListFragment"/>
+
     </fragment>
     <fragment android:id="@+id/imageListFragment"
               android:name="com.example.testingenvironment.imagelist.ImageListFragment"
@@ -24,6 +25,7 @@
               tools:layout="@layout/image_list_fragment"
     >
         <action android:id="@+id/action_imageListFragment_to_detailFragment" app:destination="@id/detailFragment"/>
+        <argument android:name="album" app:argType="com.example.testingenvironment.database.Album"/>
     </fragment>
 
 

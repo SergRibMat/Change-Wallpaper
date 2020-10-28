@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,7 +30,10 @@ class ImageListFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.image_list_fragment, container, false)
 
-        binding.imageListRecycleView.layoutManager = GridLayoutManager(context, 2)
+
+        val args = ImageListFragmentArgs.fromBundle(requireArguments())
+
+        showToast("Name= ${args.album.name} y albumGroup= ${args.album.albumGroup}")
 
         return inflater.inflate(R.layout.image_list_fragment, container, false)
     }
@@ -42,6 +46,14 @@ class ImageListFragment : Fragment() {
 
     fun toDetailListener(){
 
+    }
+
+    private fun showToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showToast(text: Int) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
 }

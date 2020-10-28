@@ -50,6 +50,6 @@ class ItemViewHolder constructor(val binding: ImageAlbumItemBinding) : RecyclerV
 
 }
 
-class AlbumListener(val clickListener: (albumGroup: Int) -> Unit) {
-    fun onClick(album: Album) = clickListener(album.albumGroup)
+class AlbumListener(val clickListener: (album: Album) -> Unit) {
+    fun onClick(album: Album) = clickListener(album)
 }

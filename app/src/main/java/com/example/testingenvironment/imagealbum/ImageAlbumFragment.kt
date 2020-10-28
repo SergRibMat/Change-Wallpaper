@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.testingenvironment.R
@@ -47,6 +48,7 @@ class ImageAlbumFragment : Fragment() {
 
         //require not null is a kotlin function that throws an illegal argument exception if the value is null
 
+
         return binding.root
 
     }
@@ -65,15 +67,11 @@ class ImageAlbumFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        binding.albumList.adapter = ImageAlbumRecyclerViewAdapter(AlbumListener { albumGroup: Int ->
-            showToast("El id es $albumGroup")
-            //1- este listener le dara algo al viewModel
-            //2- el viewmodel cambiara un valor que hay en un livedata
-            //el observe que apunta a ese live data accionara el codigo de navegacion con el dato en cueston
+        setUpObservers()
 
+        binding.albumList.adapter = ImageAlbumRecyclerViewAdapter(AlbumListener { album ->
+            viewModel.navigateToImageListFragment(album)
         })
-
-        //showToast("Hay ${viewModel.albumList.value?.size} elementos en la lista")
     }
 
     private fun setOnClickListener() {
@@ -90,8 +88,17 @@ class ImageAlbumFragment : Fragment() {
 
     private fun buttonNavToImageList(){
         binding.toImageListButton.setOnClickListener { view ->
-            view.findNavController().navigate(R.id.action_imageAlbumFragment_to_imageListFragment)
+            //view.findNavController().navigate(ImageAlbumFragmentDirections.actionImageAlbumFragmentToImageListFragment())
         }
+    }
+
+    fun setUpObservers(){
+        viewModel.navigateToImageList.observe(viewLifecycleOwner, {
+            if ( null != it ) {
+                this.findNavController().navigate(ImageAlbumFragmentDirections.actionImageAlbumFragmentToImageListFragment(it))
+                viewModel.navigateToImageListFragmentCompleted()
+            }
+        })
     }
 
     private fun showToast(text: String) {

@@ -23,6 +23,10 @@ class ImageAlbumViewModel(
     val albumList: LiveData<List<Album>>
         get() = _albumList
 
+    private var _navigateToImageList = MutableLiveData<Album>()
+    val navigateToImageList: LiveData<Album?>
+        get() = _navigateToImageList
+
     val imageUriList = MutableLiveData<List<String>>()
 
     //coroutines
@@ -32,6 +36,7 @@ class ImageAlbumViewModel(
 
 
     init {
+        _navigateToImageList.value = null
         loadAlbumsIntoList()
     }
 
@@ -46,11 +51,16 @@ class ImageAlbumViewModel(
     fun loadAlbumsIntoList(){
         oiScope.launch {
             _albumList.postValue(dataSource.getAllAlbums())
-
         }
-
     }
 
+    fun navigateToImageListFragment(album: Album){
+        _navigateToImageList.value = album
+    }
+
+    fun navigateToImageListFragmentCompleted(){
+        _navigateToImageList.value = null
+    }
 
     override fun onCleared() {
         super.onCleared()
