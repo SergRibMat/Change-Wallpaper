@@ -24,15 +24,17 @@ import com.example.testingenvironment.databinding.DetailFragmentBinding
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
 import com.example.testingenvironment.databinding.ImageListFragmentBinding
 import com.example.testingenvironment.imagealbum.ImageAlbumViewModelFactory
-import com.example.testingenvironment.imagealbum.REQUEST_IMAGE_GET
 
-lateinit var binding: ImageListFragmentBinding
+
+
+const val REQUEST_IMAGE_GET = 101
 
 class ImageListFragment : Fragment() {
 
 
 
     private lateinit var viewModel: ImageListViewModel
+    lateinit var binding: ImageListFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +43,6 @@ class ImageListFragment : Fragment() {
 
         binding = ImageListFragmentBinding.inflate(inflater)
 
-
-        val args = ImageListFragmentArgs.fromBundle(requireArguments())
 
         binding.lifecycleOwner = this
 
@@ -60,11 +60,11 @@ class ImageListFragment : Fragment() {
         //reference to the data sourse
         val dataSource = ImageUriDatabase.getInstance(application).imageUriDatabaseDao
 
-        val viewModelFactory = ImageListViewModelFactory(dataSource, application)
+        val viewModelFactory = ImageListViewModelFactory(dataSource, application, setAlbumGroupIntoViewModel())
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(ImageListViewModel::class.java)
 
-        declareObservers()
+
 
         toDetailListener()
 
@@ -74,18 +74,22 @@ class ImageListFragment : Fragment() {
             viewModel.navigateToDetailFragment(imageUri)
         })
 
-
+        declareObservers()
     }
 
 
 
 
 
-
+    fun setAlbumGroupIntoViewModel(): Int{
+        val args = ImageListFragmentArgs.fromBundle(requireArguments())
+        return args.album.albumGroup
+    }
 
     private fun setButtonListeners() {
         binding.addImagesBtn.setOnClickListener {
-            selectImage()
+            //selectImage()
+            showToast("tamano ${viewModel.imageList.value?.size}")
         }
     }
 
@@ -104,7 +108,7 @@ class ImageListFragment : Fragment() {
 
     fun toDetailListener(){
         binding.navToDetailBtn.setOnClickListener {
-            viewModel.addImageUriToList()
+            viewModel.insertImagesIntoDatabase(viewModel.addImageUriToList())
         }
     }
 

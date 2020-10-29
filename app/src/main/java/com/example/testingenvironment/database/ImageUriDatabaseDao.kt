@@ -38,7 +38,7 @@ interface ImageUriDatabaseDao {
     fun updateImageUri(imageUri: ImageUri)
 
     @Query("SELECT * FROM ImagesUri WHERE albumGroup = :albumGroup")
-    fun getImagesFromAlbum(albumGroup: Int): List<Album>
+    fun getImagesFromAlbum(albumGroup: Int): List<ImageUri>
 
     @Query("SELECT * FROM  Album")
     fun getAllAlbums(): List<Album>

@@ -27,7 +27,7 @@ import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
 
 
-const val REQUEST_IMAGE_GET = 101
+
 
 class ImageAlbumFragment : Fragment() {
 
