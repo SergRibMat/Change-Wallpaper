@@ -20,13 +20,14 @@ class ImageListRecycleViewAdapter(val clickListener: ImageUriClickListener): Lis
         }
     }
 
+    //this diffUtil class only works if the objects are the same, if they are different object, it wont compare the content
     companion object DiffCallback : DiffUtil.ItemCallback<ImageUri/*here goes the type of object you want to compare*/>() {
         override fun areItemsTheSame(oldItem: ImageUri, newItem: ImageUri): Boolean {
             return oldItem === newItem //compares if the objects are the same
         }
 
         override fun areContentsTheSame(oldItem: ImageUri, newItem: ImageUri): Boolean {
-            return oldItem.id == newItem.id //compares if this property of the objects are the same
+            return oldItem.name == newItem.name //compares if this property of the objects are the same
         }
     }
 

@@ -19,9 +19,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.testingenvironment.R
 import com.example.testingenvironment.database.ImageUri
+import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.DetailFragmentBinding
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
 import com.example.testingenvironment.databinding.ImageListFragmentBinding
+import com.example.testingenvironment.imagealbum.ImageAlbumViewModelFactory
 import com.example.testingenvironment.imagealbum.REQUEST_IMAGE_GET
 
 lateinit var binding: ImageListFragmentBinding
@@ -42,23 +44,37 @@ class ImageListFragment : Fragment() {
 
         val args = ImageListFragmentArgs.fromBundle(requireArguments())
 
+        binding.lifecycleOwner = this
+
         setButtonListeners()
-        toDetailListener()
+
 
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ImageListViewModel::class.java)
+
+        val application = requireNotNull(this.activity).application
+
+        //reference to the data sourse
+        val dataSource = ImageUriDatabase.getInstance(application).imageUriDatabaseDao
+
+        val viewModelFactory = ImageListViewModelFactory(dataSource, application)
+
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ImageListViewModel::class.java)
 
         declareObservers()
+
+        toDetailListener()
 
         binding.viewModel = viewModel
 
         binding.imageListGrid.adapter = ImageListRecycleViewAdapter(ImageUriClickListener { imageUri ->
             viewModel.navigateToDetailFragment(imageUri)
         })
+
+
     }
 
 
@@ -80,11 +96,15 @@ class ImageListFragment : Fragment() {
                 viewModel.navigateToDetailFragmentCompleted()
             }
         })
+
+        viewModel.imageList.observe(viewLifecycleOwner, {
+            showToast("tamano ${it.size}")
+        })
     }
 
     fun toDetailListener(){
         binding.navToDetailBtn.setOnClickListener {
-            //viewModel.navigateToDetailFragment(ImageUri(1, "Sergio", "path", 4))
+            viewModel.addImageUriToList()
         }
     }
 

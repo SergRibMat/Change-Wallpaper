@@ -11,7 +11,6 @@ import com.example.testingenvironment.database.Album
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Album>?) {
     val adapter = recyclerView.adapter as ImageAlbumRecyclerViewAdapter
     adapter.submitList(data)
-    Log.i("Yes", "YEEEEEEEES")
 }
 
 @BindingAdapter("albumName")
