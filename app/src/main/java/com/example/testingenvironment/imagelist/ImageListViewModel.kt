@@ -44,11 +44,19 @@ class ImageListViewModel(
         }
     }
 
-    fun insertImagesIntoDatabase(list: List<ImageUri>){
+    fun insertImagesIntoDatabase(list: List<String>){
         oiScope.launch {
-            dataSource.insertImageUriList(list)
+            dataSource.insertImageUriList(generateImageUrlList(list))
             loadImagesIntoList()
         }
+    }
+
+    fun generateImageUrlList(list: List<String>): List<ImageUri>{
+        val imageUriList = mutableListOf<ImageUri>()
+        list.forEach {
+            imageUriList.add(ImageUri(0, "Ser", it, albumGroup))
+        }
+        return imageUriList
     }
 
 

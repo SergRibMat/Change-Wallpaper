@@ -112,15 +112,15 @@ class ImageListFragment : Fragment() {
     fun oneOrMultiple(data: Intent?){
         if (data != null){
             var data: ClipData = data.clipData!!
-            fromClipDataToList(data)
+            viewModel.insertImagesIntoDatabase(fromClipDataToList(data))
         }
     }
 
     private fun fromClipDataToList(data: ClipData): List<String> {
         val imageList = mutableListOf<String>()
         for (i in 0 until data.itemCount) {
-            var item = data.getItemAt(i).uri
-            imageList.add(i, item.toString())
+            var item = data.getItemAt(i).toString()
+            imageList.add(i, item)
             //printImageWithGlide(this, carro , this.findViewById<ImageView>(R.id.show_picture_imageview))
         }
         return imageList.toList()

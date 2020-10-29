@@ -14,5 +14,6 @@ data class Album  (
     @ColumnInfo(name = "name")
     var name: String = "",
     @PrimaryKey(autoGenerate = true)
-    var albumGroup: Int
+    @ColumnInfo(name = "albumGroup")
+    var albumGroup: Int = 0
 ) : Parcelable

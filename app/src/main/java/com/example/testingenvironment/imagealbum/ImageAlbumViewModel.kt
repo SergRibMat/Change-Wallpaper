@@ -42,7 +42,7 @@ class ImageAlbumViewModel(
 
     fun saveAlbumIntoDatabase(albumName: String){
         oiScope.launch {
-            dataSource.insertAlbum(Album(albumName, 8))
+            dataSource.insertAlbum(Album(albumName, 0))
             _albumList.postValue(dataSource.getAllAlbums())
         }
 

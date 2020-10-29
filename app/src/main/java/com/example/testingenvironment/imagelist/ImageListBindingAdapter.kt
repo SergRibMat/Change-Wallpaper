@@ -9,3 +9,5 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<ImageUri>?) {
     val adapter = recyclerView.adapter as ImageListRecycleViewAdapter
     adapter.submitList(data)
 }
+
+
