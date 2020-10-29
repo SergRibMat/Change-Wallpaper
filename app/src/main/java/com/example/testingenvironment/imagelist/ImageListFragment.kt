@@ -64,8 +64,6 @@ class ImageListFragment : Fragment() {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(ImageListViewModel::class.java)
 
-
-
         toDetailListener()
 
         binding.viewModel = viewModel
@@ -77,10 +75,6 @@ class ImageListFragment : Fragment() {
         declareObservers()
     }
 
-
-
-
-
     fun setAlbumGroupIntoViewModel(): Int{
         val args = ImageListFragmentArgs.fromBundle(requireArguments())
         return args.album.albumGroup
@@ -88,8 +82,7 @@ class ImageListFragment : Fragment() {
 
     private fun setButtonListeners() {
         binding.addImagesBtn.setOnClickListener {
-            //selectImage()
-            showToast("tamano ${viewModel.imageList.value?.size}")
+            selectImage()
         }
     }
 
@@ -100,15 +93,11 @@ class ImageListFragment : Fragment() {
                 viewModel.navigateToDetailFragmentCompleted()
             }
         })
-
-        viewModel.imageList.observe(viewLifecycleOwner, {
-            showToast("tamano ${it.size}")
-        })
     }
 
     fun toDetailListener(){
         binding.navToDetailBtn.setOnClickListener {
-            viewModel.insertImagesIntoDatabase(viewModel.addImageUriToList())
+
         }
     }
 
@@ -124,7 +113,6 @@ class ImageListFragment : Fragment() {
         if (data != null){
             var data: ClipData = data.clipData!!
             fromClipDataToList(data)
-            //viewModel.imageUriList.value = imageList.toList()
         }
     }
 

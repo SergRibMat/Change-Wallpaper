@@ -34,11 +34,7 @@ class ImageListViewModel(
 
 
     init {
-        //_imageList.value = null
-        //_imageList.value = initTestImageList()
-        //addImageUriToList()
         _navigateToDetail.value = null
-        //insertImagesIntoDatabase(initTestImageList())
         loadImagesIntoList()
     }
 
@@ -55,25 +51,6 @@ class ImageListViewModel(
         }
     }
 
-
-    private fun initTestImageList() = listOf(
-            ImageUri(1, "Sergio", "path", 1),
-            ImageUri(2, "Ribera", "path", 2),
-            ImageUri(3, "Mateu", "path", 3),
-            ImageUri(3, "Juan", "path", 4),
-            ImageUri(5, "Conchin", "path", 5),
-            ImageUri(6, "Silvia", "path", 6)
-        )
-
-
-    fun addImageUriToList() =listOf(
-            ImageUri(11, "Silvia", "path", 8),
-            ImageUri(12, "Pedro", "Path", 8)
-        )
-
-    //1-añadir la lista de imagenes a la base de datos
-    //2-recoger los datos de la base de datos cuando ha sido añadido
-    //3- introducir esos datos en la lista
 
     fun navigateToDetailFragment(imageUri: ImageUri){
         _navigateToDetail.value = imageUri
