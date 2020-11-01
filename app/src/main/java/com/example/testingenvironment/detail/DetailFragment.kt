@@ -24,7 +24,7 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.detail_fragment, container, false)
+        binding = DetailFragmentBinding.inflate(inflater)
 
         return binding.root
     }
@@ -34,7 +34,9 @@ class DetailFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         // TODO: Use the ViewModel
 
+
         val args = DetailFragmentArgs.fromBundle(requireArguments())
+        binding.imageUri = args.ImageUri
         showToast("Nombre objeto= ${args.ImageUri.name} y path ${args.ImageUri.pathToImage}")
     }
 
