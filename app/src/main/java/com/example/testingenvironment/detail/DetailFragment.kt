@@ -1,5 +1,7 @@
 package com.example.testingenvironment.detail
 
+import android.app.WallpaperManager
+import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,10 +11,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.testingenvironment.R
 import com.example.testingenvironment.databinding.DetailFragmentBinding
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
 import com.example.testingenvironment.imagelist.ImageListFragmentArgs
+import com.example.testingenvironment.imagelist.ImageUriClickListener
+import kotlinx.coroutines.*
 
 class DetailFragment : Fragment() {
 
@@ -37,6 +42,10 @@ class DetailFragment : Fragment() {
 
         val args = DetailFragmentArgs.fromBundle(requireArguments())
         binding.imageUri = args.ImageUri
+        binding.clickListener = ImageUriClickListener {
+            setWallpaperMethod(it.pathToImage, this.context!!)
+        }
+
         showToast("Nombre objeto= ${args.ImageUri.name} y path ${args.ImageUri.pathToImage}")
     }
 
@@ -47,5 +56,33 @@ class DetailFragment : Fragment() {
     private fun showToast(text: Int) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
+
+    private fun setWallpaperMethod(stringPathToImage: String, appContext: Context) {//call this method on a background thread
+
+        var activityJob = Job()
+        val uiScope = CoroutineScope(Dispatchers.IO + activityJob)
+
+        if (!stringPathToImage.isNullOrEmpty()) {
+            uiScope.launch {
+                val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(appContext)
+                if (wallpaperManager.isSetWallpaperAllowed) {
+                wallpaperManager.setBitmap(getImageWithGlide(stringPathToImage, appContext))
+                }
+                withContext(Dispatchers.Main){
+                    showToast("Wallpaper changed")
+                }
+                activityJob.cancel()
+
+            }
+        }
+
+    }
+
+    private fun getImageWithGlide(stringPathToImage: String, appContext: Context) =
+        Glide.with(appContext)
+            .asBitmap()
+            .load(stringPathToImage)
+            .submit()
+            .get()
 
 }

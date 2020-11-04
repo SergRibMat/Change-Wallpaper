@@ -106,7 +106,9 @@ class ImageAlbumFragment : Fragment() {
             getString(R.string.accept)
         ) { dialogInterface, i ->
             val name = etFolder.text.toString().trim { it <= ' ' }
-            viewModel.saveAlbumIntoDatabase(name)
+            if (name.isNotEmpty()){
+                viewModel.saveAlbumIntoDatabase(name)
+            }
             dialogInterface.cancel()
         }
 

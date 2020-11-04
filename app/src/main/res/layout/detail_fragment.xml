@@ -7,6 +7,11 @@
         <variable
                 name="imageUri"
                 type="com.example.testingenvironment.database.ImageUri"/>
+
+        <variable
+                name="clickListener"
+                type="com.example.testingenvironment.imagelist.ImageUriClickListener"/>
+
     </data>
 
     <FrameLayout
@@ -22,6 +27,14 @@
                 android:adjustViewBounds="true"
                 app:imageUri="@{imageUri.pathToImage}"
                 tools:srcCompat="@tools:sample/avatars"
+        />
+        <Button
+                android:text="Make It Your Wallpaper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/set_wallpaper_btn"
+                android:layout_gravity="bottom"
+                android:onClick="@{() -> clickListener.onClick(imageUri)}"
         />
     </FrameLayout>
 </layout>
