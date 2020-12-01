@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 
-@Entity(tableName = "Album")
+@Entity(tableName = "album")
 @Parcelize
 data class Album  (
 

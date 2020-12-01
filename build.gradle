@@ -6,7 +6,7 @@ buildscript {
         version_lifecycle = "2.2.0"
         version_recyclerview = "1.1.0"
         version_room = "2.2.5"
-        //version_google_material = "2.0.0"
+        version_google_material = "1.2.1"
 
     }
     repositories {

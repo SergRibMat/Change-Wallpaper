@@ -37,6 +37,9 @@ class ExampleInstrumentedTest {
             .allowMainThreadQueries()
             .build()
         imageUriDao = db.imageUriDatabaseDao
+
+        insertAlbums()
+        insertImageUri()
     }
 
     @After
@@ -45,39 +48,104 @@ class ExampleInstrumentedTest {
         db.close()
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun insertAndGetAlbum() {
-        val album = Album("myName", 1)
-        imageUriDao.insertAlbum(album)
-        val albums = imageUriDao.getAllAlbums()
-        //assertEquals(albums?.get(0).name, "myName")
+    fun insertAlbums(){
+        val album1 = Album("First Album", 0)
+        imageUriDao.insertAlbum(album1)
 
-        val imageUri = ImageUri(1, "myName", "Path", 1)
-        val imageUri2 = ImageUri(2, "myName", "Path", 1)
-        val imageUri3 = ImageUri(3, "myName", "Path", 1)
-        val imageUri4 = ImageUri(4, "myName", "Path", 2)
+        val album2 = Album("Second Album", 0)
+        imageUriDao.insertAlbum(album2)
+
+        val album3 = Album("Third Album", 0)
+        imageUriDao.insertAlbum(album3)
+
+        val album4 = Album("Fourth Album", 0)
+        imageUriDao.insertAlbum(album4)
+    }
+
+    fun insertImageUri(){
+        val imageUri = ImageUri(0, "First Uri", "Path", 1)
+        val imageUri2 = ImageUri(0, "Second Uri", "Path", 1)
+        val imageUri3 = ImageUri(0, "Third Uri", "Path", 1)
+        val imageUri4 = ImageUri(0, "Fourth Uri", "Path", 2)
         imageUriDao.insertImageUriList(listOf(imageUri, imageUri2, imageUri3))
         imageUriDao.insertImageUri(imageUri4)
+    }
 
-        imageUriDao.DeleteAlbumAndImages(album.albumGroup)
+    @Test
+    fun getAllImageUriTest(){//OK
 
-        imageUriDao.deleteAlbum(album)
+        val imageUriList = imageUriDao.getAllImageUri()
+        assertEquals(4,imageUriList.size)
+    }
 
-        val imageUriList = imageUriDao.getImagesFromAlbum(1)
+    @Test
+    fun deleteAlbumTest(){//OK
+        imageUriDao.deleteAlbum(Album("Fourth Album", 4))
 
-        //assertEquals(imageUriList.size, 3)
+        imageUriDao.deleteAlbumByAlbumGroup(3)
 
+        val albumList = imageUriDao.getAllAlbums()
 
+        assertEquals(2,albumList.size)
+    }
 
-        //assertEquals(imageUriList.size, 0)
+    @Test
+    fun deleteImageUriTest(){//OK
 
-        assertEquals(albums.size, 0)
+        imageUriDao.deleteImageUri(ImageUri(2, "Second Uri", "Path", 1))
 
-        //assertEquals(albums?.get(0).name, "myName")
+        imageUriDao.deleteImageUriById(1)
 
+        val imageUriList = imageUriDao.getAllImageUri()
 
+        assertEquals(2,imageUriList.size)
 
+    }
+
+    @Test
+    fun deleteAlbumCascadeTest(){//OK
+        imageUriDao.deleteAlbumByAlbumGroup(1)
+
+        val imageUriList = imageUriDao.getAllImageUri()
+
+        assertEquals(1,imageUriList.size)
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun getAlbum() {//OK
+
+        val albumList = imageUriDao.getAllAlbums()
+
+        assertEquals(albumList.size, 4)
+
+    }
+
+    @Test
+    fun getAlbumById(){//OK
+        val album = imageUriDao.getAlbumById(4)
+        assertEquals(album, Album("Fourth Album", 4))
+    }
+
+    @Test
+    fun getImageUriById(){//OK
+        val imageUri = imageUriDao.getImageUriById(2)
+        assertEquals(imageUri, ImageUri(2, "Second Uri", "Path", 1))
+    }
+
+    @Test
+    fun updateAlbumTest(){//OK
+        imageUriDao.updateAlbum(Album("Changed", 4))
+        val album = imageUriDao.getAlbumById(4)
+        assertEquals(album.name, "Changed")
+    }
+
+    @Test
+    fun updateImageUriTest(){//OK
+        imageUriDao.updateImageUri(ImageUri(2, "Second Uri", "Changed", 1))
+        val imageUri = imageUriDao.getImageUriById(2)
+        assertEquals(imageUri.pathToImage, "Changed")
     }
 
 

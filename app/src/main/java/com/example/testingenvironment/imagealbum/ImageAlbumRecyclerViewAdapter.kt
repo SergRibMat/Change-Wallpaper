@@ -1,9 +1,7 @@
 package com.example.testingenvironment.imagealbum
 
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
@@ -38,14 +36,21 @@ class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdap
 
 }
 
-class ItemViewHolder constructor(val binding: ImageAlbumItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class ItemViewHolder constructor(val binding: ImageAlbumItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
 
 
     fun bind(album: Album, clickListener: AlbumListener) {
         binding.album = album
         //binding.album = Album("Sergio", 1)
+        //registerForContextMenu(binding.albumItemLinearLayout)
         binding.clickListener = clickListener
+        binding.albumItemLinearLayout.setOnCreateContextMenuListener(this)
         binding.executePendingBindings()//use always this line when using bindings and recyclerViews
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        menu?.add(adapterPosition, 0, 0, "Delete")
+        menu?.add(adapterPosition, 1, 1, "Rename")
     }
 
 }

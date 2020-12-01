@@ -23,23 +23,30 @@ interface ImageUriDatabaseDao {
         }
     }
 
-    fun DeleteAlbumAndImages(albumGroup: Int){
-        //deleteAlbum(albumGroup)
-        //deleteImageUriByAlbumGroup(albumGroup)
-    }
-
-    @Query("DELETE FROM ImagesUri WHERE albumGroup = :albumGroup")
-    fun deleteImageUriByAlbumGroup(albumGroup: Int)
+    @Query("DELETE FROM album WHERE albumGroup = :albumGroup")
+    fun deleteAlbumByAlbumGroup(albumGroup: Int)
 
     @Query("DELETE FROM ImagesUri WHERE id = :id")
     fun deleteImageUriById(id: Int)
 
+    @Query("SELECT * FROM ImagesUri")
+    fun getAllImageUri(): List<ImageUri>
+
+    @Delete
+    fun deleteImageUri(imageUri: ImageUri)
+
     @Update
     fun updateImageUri(imageUri: ImageUri)
+
+    @Query("SELECT * FROM album WHERE albumGroup = :id")
+    fun getAlbumById(id: Int): Album
+
+    @Query("SELECT * FROM ImagesUri WHERE id = :id")
+    fun getImageUriById(id: Int): ImageUri
 
     @Query("SELECT * FROM ImagesUri WHERE albumGroup = :albumGroup")
     fun getImagesFromAlbum(albumGroup: Int): List<ImageUri>
 
-    @Query("SELECT * FROM  Album")
+    @Query("SELECT * FROM  album")
     fun getAllAlbums(): List<Album>
 }

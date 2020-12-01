@@ -1,11 +1,11 @@
 package com.example.testingenvironment.imagealbum
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import android.view.*
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -122,6 +122,20 @@ class ImageAlbumFragment : Fragment() {
             LinearLayout.LayoutParams.MATCH_PARENT
         ) // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
         return myEditText
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            0 -> {
+                showToast("Option 1")
+                true
+            }
+            1 -> {
+                showToast("option 2")
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
     }
 
 }
