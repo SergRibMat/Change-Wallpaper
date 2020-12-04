@@ -14,34 +14,31 @@
                                                          android:layout_height="match_parent">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
-                                                           android:layout_height="match_parent">
-
-            <Button
-                    android:id="@+id/fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="+album"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"/>
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/album_list"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     app:listData="@{viewModel.albumList}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
+                    app:spanCount="1"
                     tools:itemCount="18"
-                    tools:listitem="@layout/image_album_item"
-                    app:layout_constraintBottom_toTopOf="@+id/fab"/>
+                    tools:listitem="@layout/image_album_item"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vector_add_48"
+                app:backgroundTint="@color/colorAccent"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:id="@+id/add_album_btn"
+                app:elevation= "6dp"
+        />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

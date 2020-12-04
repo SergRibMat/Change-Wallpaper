@@ -23,6 +23,9 @@ interface ImageUriDatabaseDao {
         }
     }
 
+    @Query("UPDATE  album SET name = :name WHERE albumGroup = :albumGroup")
+    fun updateAlbumByAlbumGroup(albumGroup: Int, name: String)
+
     @Query("DELETE FROM album WHERE albumGroup = :albumGroup")
     fun deleteAlbumByAlbumGroup(albumGroup: Int)
 

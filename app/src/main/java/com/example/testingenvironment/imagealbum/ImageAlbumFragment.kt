@@ -63,7 +63,7 @@ class ImageAlbumFragment : Fragment() {
     }
 
     private fun setOnClickListener() {
-        binding.fab.setOnClickListener { view ->
+        binding.addAlbumBtn.setOnClickListener { view ->
             createNewAlbumAlertDialog()
             viewModel.loadAlbumsIntoList()
         }
@@ -126,16 +126,48 @@ class ImageAlbumFragment : Fragment() {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            0 -> {
-                showToast("Option 1")
+            0 -> {//delete
+                val id = item.order
+                viewModel.deleteAlbum(id)
                 true
             }
-            1 -> {
-                showToast("option 2")
+            1 -> {//rename
+                val id = item.order - 1
+                renameAlbumAlertDialog(id)
+
                 true
             }
             else -> super.onContextItemSelected(item)
         }
+    }
+
+    private fun renameAlbumAlertDialog(id: Int){
+        val etFolder = createFolderEditText()
+        if (etFolder.parent != null) {
+            (etFolder.parent as ViewGroup).removeView(etFolder) // esto soluciona el problema java.lang.IllegalStateException: The specified child already has a parent. You must call removeView() on the child's parent first.
+        }
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(true)
+        builder.setTitle(getString(R.string.newgroup))
+        builder.setMessage(getString(R.string.entername))
+        builder.setView(etFolder)
+        builder.setNegativeButton(
+            getString(R.string.cancel)
+        ) { dialogInterface, i ->
+            showToast(R.string.actioncanceled)
+            dialogInterface.cancel()
+        }.setPositiveButton(
+            getString(R.string.accept)
+        ) { dialogInterface, i ->
+            val name = etFolder.text.toString().trim { it <= ' ' }
+            if (name.isNotEmpty()){
+                viewModel.updateAlbumById(id, name)
+            }
+            dialogInterface.cancel()
+        }
+
+        builder.show()
     }
 
 }

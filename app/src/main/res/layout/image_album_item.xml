@@ -39,11 +39,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/image_grid"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:padding="6dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="1"
+                android:orientation="horizontal"
                 tools:itemCount="16"
                 tools:listitem="@layout/image_item_album_list"
         />

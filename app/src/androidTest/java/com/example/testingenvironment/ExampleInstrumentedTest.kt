@@ -141,11 +141,27 @@ class ExampleInstrumentedTest {
         assertEquals(album.name, "Changed")
     }
 
+    fun insertSingleAlbum(name: String, albumGruop: Int){
+        imageUriDao.insertAlbum(Album(name, albumGruop))
+    }
+
+    fun deleteSingleAlbum(id: Int){
+        imageUriDao.deleteAlbumByAlbumGroup(id)
+    }
+
     @Test
     fun updateImageUriTest(){//OK
         imageUriDao.updateImageUri(ImageUri(2, "Second Uri", "Changed", 1))
         val imageUri = imageUriDao.getImageUriById(2)
         assertEquals(imageUri.pathToImage, "Changed")
+    }
+
+
+    @Test
+    fun updateAlbumByIdTest(){//OK
+        imageUriDao.updateAlbumByAlbumGroup(1, "Sergio")
+        val album =imageUriDao.getAlbumById(1)
+        assertEquals(album.name, "Sergio")
     }
 
 

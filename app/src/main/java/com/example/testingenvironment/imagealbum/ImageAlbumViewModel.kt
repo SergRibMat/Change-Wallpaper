@@ -43,8 +43,10 @@ class ImageAlbumViewModel(
     fun saveAlbumIntoDatabase(albumName: String){
         oiScope.launch {
             dataSource.insertAlbum(Album(albumName, 0))
-            _albumList.postValue(dataSource.getAllAlbums())
+            loadAlbumsIntoList()
         }
+
+
 
     }
 
@@ -60,6 +62,30 @@ class ImageAlbumViewModel(
 
     fun navigateToImageListFragmentCompleted(){
         _navigateToImageList.value = null
+    }
+
+
+
+    fun deleteAlbum(albumGroup: Int){
+        oiScope.launch {
+            dataSource.deleteAlbumByAlbumGroup(albumGroup)
+            loadAlbumsIntoList()
+        }
+    }
+
+    fun updateAlbum(album: Album){
+        oiScope.launch {
+            dataSource.updateAlbum(album)
+            loadAlbumsIntoList()
+        }
+    }
+
+    fun updateAlbumById(id: Int, name: String){
+        oiScope.launch {
+            dataSource.updateAlbumByAlbumGroup(id, name)
+            loadAlbumsIntoList()
+        }
+
     }
 
     override fun onCleared() {

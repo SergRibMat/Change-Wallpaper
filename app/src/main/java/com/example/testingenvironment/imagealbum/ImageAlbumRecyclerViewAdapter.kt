@@ -41,17 +41,19 @@ class ItemViewHolder constructor(val binding: ImageAlbumItemBinding) : RecyclerV
 
     fun bind(album: Album, clickListener: AlbumListener) {
         binding.album = album
-        //binding.album = Album("Sergio", 1)
-        //registerForContextMenu(binding.albumItemLinearLayout)
         binding.clickListener = clickListener
+
         binding.albumItemLinearLayout.setOnCreateContextMenuListener(this)
         binding.executePendingBindings()//use always this line when using bindings and recyclerViews
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        menu?.add(adapterPosition, 0, 0, "Delete")
-        menu?.add(adapterPosition, 1, 1, "Rename")
+        val order: Int? = binding.album?.albumGroup ?: 0
+        val order2: Int = order!!
+        menu?.add(adapterPosition, 0, order2, "Delete")
+        menu?.add(adapterPosition, 1, order2 + 1, "Rename")
     }
+
 
 }
 
