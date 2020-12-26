@@ -1,20 +1,29 @@
 package com.example.testingenvironment
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.*
 import androidx.room.Room
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.example.testingenvironment.database.Album
 import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.database.ImageUriDatabaseDao
+import com.example.testingenvironment.imagealbum.ImageAlbumViewModel
 import org.junit.After
-
-import org.junit.Test
-import org.junit.runner.RunWith
-
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import java.io.IOException
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -26,10 +35,12 @@ class ExampleInstrumentedTest {
 
     private lateinit var imageUriDao: ImageUriDatabaseDao
     private lateinit var db: ImageUriDatabase
+    private lateinit var imageAlbumViewModel: ViewModel
+    private lateinit var context: Context
 
     @Before
     fun createDb() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        context = InstrumentationRegistry.getInstrumentation().targetContext
         // Using an in-memory database because the information stored here disappears when the
         // process is killed.
         db = Room.inMemoryDatabaseBuilder(context, ImageUriDatabase::class.java)
@@ -75,7 +86,7 @@ class ExampleInstrumentedTest {
     fun getAllImageUriTest(){//OK
 
         val imageUriList = imageUriDao.getAllImageUri()
-        assertEquals(4,imageUriList.size)
+        assertEquals(4, imageUriList.size)
     }
 
     @Test
@@ -86,7 +97,7 @@ class ExampleInstrumentedTest {
 
         val albumList = imageUriDao.getAllAlbums()
 
-        assertEquals(2,albumList.size)
+        assertEquals(2, albumList.size)
     }
 
     @Test
@@ -98,7 +109,7 @@ class ExampleInstrumentedTest {
 
         val imageUriList = imageUriDao.getAllImageUri()
 
-        assertEquals(2,imageUriList.size)
+        assertEquals(2, imageUriList.size)
 
     }
 
@@ -108,7 +119,7 @@ class ExampleInstrumentedTest {
 
         val imageUriList = imageUriDao.getAllImageUri()
 
-        assertEquals(1,imageUriList.size)
+        assertEquals(1, imageUriList.size)
 
     }
 
@@ -164,6 +175,90 @@ class ExampleInstrumentedTest {
         assertEquals(album.name, "Sergio")
     }
 
+}
+
+//@Rule
+//val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+
+//@Rule
+//val testRule = InstantTaskExecutorRule()
+
+@RunWith(JUnit4::class)
+class ImageAlbumViewModelTest{
+
+    @get:Rule // -> allows liveData to work on different thread besides main, must be public!
+    //var executorRule = InstantTaskExecutorRule()
+
+    private lateinit var dao: ImageUriDatabaseDao
+
+    private lateinit var viewModel: ImageAlbumViewModel
+    private lateinit var mockObserver: Observer<List<Album>>
+
+
+    @Before
+    fun setUp() {
+        //setup view model with dependencies mocked
+        dao = mock(ImageUriDatabaseDao::class.java)
+        viewModel = ImageAlbumViewModel(this.dao, Application())
+        //mock the live data observer
+        viewModel.albumList.observeForever {  }
+    }
+
+    @Test
+    fun fetchUserRepositories_positiveResponse() {
+        // Mock API response
+        Mockito.`when`(dao.getAllAlbums()).thenAnswer {
+            listOf(
+                Album("First Album", 1),
+                Album("Second Album", 2)
+            )
+        }
+        // Attacch fake observer
+        //val observer = mock(Observer::class.java) as Observer<List<Album>>
+        //viewModel.albumList.observeForever(observer)
+        // Invoke
+        viewModel.loadAlbumsIntoList()
+        // Verify
+        //assertNotNull(viewModel.albumList.value)
+        assertEquals(
+            listOf(
+                Album("First Album", 1),
+                Album("Second Album", 2)
+            ), viewModel.albumList.getOrAwaitValue()
+        )
+    }
+
 
 
 }
+
+
+
+/* Copyright 2019 Google LLC.
+   SPDX-License-Identifier: Apache-2.0 */
+fun <T> LiveData<T>.getOrAwaitValue(
+    time: Long = 2,
+    timeUnit: TimeUnit = TimeUnit.SECONDS
+): T {
+    var data: T? = null
+    val latch = CountDownLatch(1)
+    val observer = object : Observer<T> {
+        override fun onChanged(o: T?) {
+            data = o
+            latch.countDown()
+            this@getOrAwaitValue.removeObserver(this)
+        }
+    }
+
+    this.observeForever(observer)
+
+    // Don't wait indefinitely if the LiveData is not set.
+    if (!latch.await(time, timeUnit)) {
+        throw TimeoutException("LiveData value was never set.")
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    return data as T
+}
+

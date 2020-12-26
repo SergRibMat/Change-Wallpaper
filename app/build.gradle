@@ -39,6 +39,10 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -54,9 +58,19 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    //For mocking objects and verifying stubs
+    implementation 'org.mockito:mockito-core:2.25.1'
+    androidTestImplementation 'org.mockito:mockito-android:3.6.28'
+
+    //For making more readable assertions
+    testImplementation "com.google.truth:truth:1.0"
+
+    //For accessing Test helpers to test LiveData
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+
     //glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     //navigation
     implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"

@@ -64,8 +64,11 @@ class ImageAlbumFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.addAlbumBtn.setOnClickListener { view ->
-            createNewAlbumAlertDialog()
-            viewModel.loadAlbumsIntoList()
+            //createNewAlbumAlertDialog()
+            //viewModel.loadAlbumsIntoList()
+            val listSize = viewModel.albumWithImageList.value?.size
+            val albumListSize = viewModel.albumList.value?.size
+            showToast("$listSize")
         }
     }
 

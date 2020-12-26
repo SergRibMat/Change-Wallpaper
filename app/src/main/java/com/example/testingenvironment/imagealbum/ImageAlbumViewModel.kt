@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testingenvironment.database.Album
+import com.example.testingenvironment.database.AlbumWithImages
+import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabaseDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +25,11 @@ class ImageAlbumViewModel(
     val albumList: LiveData<List<Album>>
         get() = _albumList
 
+    private var _albumWithImageList = MutableLiveData<MutableList<AlbumWithImages>>()
+    val albumWithImageList: LiveData<MutableList<AlbumWithImages>>
+        get() = _albumWithImageList
+
+
     private var _navigateToImageList = MutableLiveData<Album>()
     val navigateToImageList: LiveData<Album?>
         get() = _navigateToImageList
@@ -37,22 +44,30 @@ class ImageAlbumViewModel(
 
     init {
         _navigateToImageList.value = null
-        loadAlbumsIntoList()
+        //loadAlbumsIntoList()
+        loadAlbumWithImagesIntoList()
+    }
+
+    fun loadAlbumWithImagesIntoList(){
+        oiScope.launch {
+
+            _albumWithImageList.postValue(dataSource.getAllAlbumWithImage())
+        }
+
+
     }
 
     fun saveAlbumIntoDatabase(albumName: String){
         oiScope.launch {
             dataSource.insertAlbum(Album(albumName, 0))
-            loadAlbumsIntoList()
         }
-
-
-
     }
 
     fun loadAlbumsIntoList(){
+
         oiScope.launch {
             _albumList.postValue(dataSource.getAllAlbums())
+            loadAlbumWithImagesIntoList()
         }
     }
 
@@ -78,6 +93,14 @@ class ImageAlbumViewModel(
             dataSource.updateAlbum(album)
             loadAlbumsIntoList()
         }
+    }
+
+    fun loadImagesIntoList(albumGroup: Int): List<ImageUri>{
+        lateinit var imageList: List<ImageUri>
+        oiScope.launch {
+            imageList = dataSource.getImagesFromAlbum(albumGroup)
+        }
+        return imageList
     }
 
     fun updateAlbumById(id: Int, name: String){

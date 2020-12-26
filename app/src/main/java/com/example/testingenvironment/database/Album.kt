@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "album")
 @Parcelize
-data class Album  (
+data class Album (
 
     @ColumnInfo(name = "name")
     var name: String = "",

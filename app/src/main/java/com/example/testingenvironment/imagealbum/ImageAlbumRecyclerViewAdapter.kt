@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testingenvironment.R
 import com.example.testingenvironment.database.Album
+import com.example.testingenvironment.database.AlbumWithImages
 import com.example.testingenvironment.databinding.ImageAlbumItemBinding
 
-class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdapter<Album, ItemViewHolder>(DiffCallback) {
+class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdapter<AlbumWithImages, ItemViewHolder>(DiffCallback) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -24,13 +25,13 @@ class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdap
     }
 
     companion object DiffCallback :
-        DiffUtil.ItemCallback<Album>() {
-        override fun areItemsTheSame(oldItem: Album, newItem: Album): Boolean {
-            return oldItem.name == newItem.name
+        DiffUtil.ItemCallback<AlbumWithImages>() {
+        override fun areItemsTheSame(oldItem: AlbumWithImages, newItem: AlbumWithImages): Boolean {
+            return oldItem.album.name == newItem.album.name
         }
 
-        override fun areContentsTheSame(oldItem: Album, newItem: Album): Boolean {
-            return oldItem == newItem
+        override fun areContentsTheSame(oldItem: AlbumWithImages, newItem: AlbumWithImages): Boolean {
+            return oldItem.album == newItem.album
         }
     }
 
@@ -39,8 +40,8 @@ class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdap
 class ItemViewHolder constructor(val binding: ImageAlbumItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
 
 
-    fun bind(album: Album, clickListener: AlbumListener) {
-        binding.album = album
+    fun bind(albumWithImages: AlbumWithImages, clickListener: AlbumListener) {
+        binding.albumWithImages = albumWithImages
         binding.clickListener = clickListener
 
         binding.albumItemLinearLayout.setOnCreateContextMenuListener(this)
@@ -48,7 +49,7 @@ class ItemViewHolder constructor(val binding: ImageAlbumItemBinding) : RecyclerV
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        val order: Int? = binding.album?.albumGroup ?: 0
+        val order: Int? = binding.albumWithImages?.album?.albumGroup ?: 0
         val order2: Int = order!!
         menu?.add(adapterPosition, 0, order2, "Delete")
         menu?.add(adapterPosition, 1, order2 + 1, "Rename")

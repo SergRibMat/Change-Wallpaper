@@ -52,4 +52,12 @@ interface ImageUriDatabaseDao {
 
     @Query("SELECT * FROM  album")
     fun getAllAlbums(): List<Album>
+
+    fun getAllAlbumWithImage(): MutableList<AlbumWithImages>{
+        val myList = mutableListOf<AlbumWithImages>()
+        getAllAlbums().forEach { album ->
+            myList.add(AlbumWithImages(album, getImagesFromAlbum(album.albumGroup)))
+        }
+        return myList
+    }
 }
