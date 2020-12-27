@@ -31,7 +31,7 @@ class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdap
         }
 
         override fun areContentsTheSame(oldItem: AlbumWithImages, newItem: AlbumWithImages): Boolean {
-            return /*oldItem.album == newItem.album*/ false
+            return oldItem.album == newItem.album
         }
     }
 
