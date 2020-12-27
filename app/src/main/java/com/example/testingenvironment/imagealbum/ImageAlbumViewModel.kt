@@ -25,8 +25,8 @@ class ImageAlbumViewModel(
     val albumList: LiveData<List<Album>>
         get() = _albumList
 
-    private var _albumWithImageList = MutableLiveData<MutableList<AlbumWithImages>>()
-    val albumWithImageList: LiveData<MutableList<AlbumWithImages>>
+    private var _albumWithImageList = MutableLiveData<List<AlbumWithImages>>()
+    val albumWithImageList: LiveData<List<AlbumWithImages>>
         get() = _albumWithImageList
 
 
@@ -34,7 +34,6 @@ class ImageAlbumViewModel(
     val navigateToImageList: LiveData<Album?>
         get() = _navigateToImageList
 
-    val imageUriList = MutableLiveData<List<String>>()
 
     //coroutines
     private var viewModelJob = Job()
@@ -50,8 +49,7 @@ class ImageAlbumViewModel(
 
     fun loadAlbumWithImagesIntoList(){
         oiScope.launch {
-
-            _albumWithImageList.postValue(dataSource.getAllAlbumWithImage())
+            _albumWithImageList.postValue(dataSource.getAllAlbumWithImage().toList())
         }
 
 

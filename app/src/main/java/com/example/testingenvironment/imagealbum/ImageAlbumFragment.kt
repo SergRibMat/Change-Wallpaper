@@ -14,14 +14,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.testingenvironment.R
 import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
-
-
+import com.example.testingenvironment.databinding.ImageAlbumItemBinding
 
 
 class ImageAlbumFragment : Fragment() {
 
     lateinit var binding: ImageAlbumFragmentBinding
     private lateinit var viewModel: ImageAlbumViewModel
+    private lateinit var imageAlbumItemBinding: ImageAlbumItemBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +29,8 @@ class ImageAlbumFragment : Fragment() {
     ): View? {
 
         binding = ImageAlbumFragmentBinding.inflate(inflater)
+
+        imageAlbumItemBinding = ImageAlbumItemBinding.inflate(inflater)
 
         setOnClickListener()
 
@@ -64,11 +66,13 @@ class ImageAlbumFragment : Fragment() {
 
     private fun setOnClickListener() {
         binding.addAlbumBtn.setOnClickListener { view ->
-            //createNewAlbumAlertDialog()
-            //viewModel.loadAlbumsIntoList()
-            val listSize = viewModel.albumWithImageList.value?.size
-            val albumListSize = viewModel.albumList.value?.size
-            showToast("$listSize")
+            createNewAlbumAlertDialog()
+            /*viewModel.albumWithImageList.observe(viewLifecycleOwner, {
+                showToast("It changed")
+            })*/
+            //val listSize = viewModel.albumWithImageList.value?.size
+            //val albumListSize = viewModel.albumList.value?.size
+            //showToast("$listSize")
         }
     }
 
@@ -111,6 +115,7 @@ class ImageAlbumFragment : Fragment() {
             val name = etFolder.text.toString().trim { it <= ' ' }
             if (name.isNotEmpty()){
                 viewModel.saveAlbumIntoDatabase(name)
+                viewModel.loadAlbumWithImagesIntoList()
             }
             dialogInterface.cancel()
         }
