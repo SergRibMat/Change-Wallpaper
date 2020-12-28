@@ -1,9 +1,11 @@
 package com.example.testingenvironment.imagelist
 
 import android.app.Application
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.testingenvironment.MainActivity
 import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabaseDao
 import kotlinx.coroutines.CoroutineScope
@@ -54,7 +56,8 @@ class ImageListViewModel(
     fun generateImageUrlList(list: List<String>): List<ImageUri>{
         val imageUriList = mutableListOf<ImageUri>()
         list.forEach {
-            imageUriList.add(ImageUri(0, "Ser", it, albumGroup))
+            var uriImageStorage = saveImageToInternalStorage(it.toUri(), MainActivity.applicationContext())
+            imageUriList.add(ImageUri(0, "", uriImageStorage.toString(), albumGroup))
         }
         return imageUriList
     }

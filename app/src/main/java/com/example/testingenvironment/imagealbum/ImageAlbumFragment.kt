@@ -35,6 +35,7 @@ class ImageAlbumFragment : Fragment() {
         setOnClickListener()
 
         binding.lifecycleOwner = this
+        imageAlbumItemBinding.lifecycleOwner = this
 
         //require not null is a kotlin function that throws an illegal argument exception if the value is null
 
@@ -61,7 +62,7 @@ class ImageAlbumFragment : Fragment() {
 
         binding.albumList.adapter = ImageAlbumRecyclerViewAdapter(AlbumListener { album ->
             viewModel.navigateToImageListFragment(album)
-        })
+        }, ImageAlbumItemRecyclerViewAdapter())
     }
 
     private fun setOnClickListener() {

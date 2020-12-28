@@ -68,6 +68,9 @@ dependencies {
     //For accessing Test helpers to test LiveData
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
+    //dexter
+    implementation 'com.karumi:dexter:6.2.1'
+
     //glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'

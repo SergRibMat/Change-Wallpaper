@@ -1,5 +1,6 @@
 package com.example.testingenvironment.imagealbum
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -23,16 +24,18 @@ class ImageAlbumItemRecyclerViewAdapter: ListAdapter<ImageUri, ImageAlbumItemRec
         parent: ViewGroup,
         viewType: Int
     ): ImageAlbumItemRecyclerViewAdapter.ImageUriViewHolder {
-        TODO("Not yet implemented")
+        return ImageUriViewHolder(ImageItemAlbumListBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
     override fun onBindViewHolder(holder: ImageAlbumItemRecyclerViewAdapter.ImageUriViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val imageUri = getItem(position)
+        holder.bind(imageUri)
     }
 
     class ImageUriViewHolder(private var binding: ImageItemAlbumListBinding):
         RecyclerView.ViewHolder(binding.root) {
         fun bind(imageUri: ImageUri) {
+            binding.imageUri = imageUri//xml variable not working. cant call ir from here nor in  the xml
             binding.executePendingBindings()
         }
     }

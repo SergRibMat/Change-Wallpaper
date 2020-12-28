@@ -20,7 +20,6 @@ const val REQUEST_IMAGE_GET = 101
 class ImageListFragment : Fragment() {
 
 
-
     private lateinit var viewModel: ImageListViewModel
     lateinit var binding: ImageListFragmentBinding
 
@@ -98,6 +97,7 @@ class ImageListFragment : Fragment() {
     }
 
     fun oneOrMultiple(data: Intent?){
+        //there is no option. I need to save the images in the app and take that
         var dataAsList: ClipData? = data?.clipData
 
         if (dataAsList != null){

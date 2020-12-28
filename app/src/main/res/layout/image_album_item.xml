@@ -45,7 +45,7 @@
         >
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/image_grid"
+                    android:id="@+id/album_with_images_image_list_grid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="6dp"
@@ -53,6 +53,8 @@
                     app:spanCount="1"
                     android:orientation="horizontal"
                     tools:itemCount="16"
+                    app:listImageUriData="@{albumWithImages.imageList}"
+                    android:clipToPadding="false"
                     tools:listitem="@layout/image_item_album_list"
                     android:layout_weight="3"
             />

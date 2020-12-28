@@ -12,7 +12,10 @@ import com.example.testingenvironment.database.Album
 import com.example.testingenvironment.database.AlbumWithImages
 import com.example.testingenvironment.databinding.ImageAlbumItemBinding
 
-class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdapter<AlbumWithImages, ItemViewHolder>(DiffCallback) {
+class ImageAlbumRecyclerViewAdapter(
+    val clickListener: AlbumListener,
+    val imageAlbumItemRecyclerViewAdapter: ImageAlbumItemRecyclerViewAdapter
+) : ListAdapter<AlbumWithImages, ItemViewHolder>(DiffCallback) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -21,7 +24,7 @@ class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdap
 
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener)
+        holder.bind(getItem(position), clickListener, imageAlbumItemRecyclerViewAdapter)
     }
 
     companion object DiffCallback :
@@ -37,12 +40,20 @@ class ImageAlbumRecyclerViewAdapter(val clickListener: AlbumListener) : ListAdap
 
 }
 
-class ItemViewHolder constructor(val binding: ImageAlbumItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
+class ItemViewHolder constructor(
+    val binding: ImageAlbumItemBinding
+) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
 
 
-    fun bind(albumWithImages: AlbumWithImages, clickListener: AlbumListener) {
+    fun bind(
+        albumWithImages: AlbumWithImages,
+        clickListener: AlbumListener,
+        imageAlbumItemRecyclerViewAdapter: ImageAlbumItemRecyclerViewAdapter
+    ) {//the error is before this
         binding.albumWithImages = albumWithImages
         binding.clickListener = clickListener
+
+        binding.albumWithImagesImageListGrid.adapter = imageAlbumItemRecyclerViewAdapter
 
         binding.albumItemLinearLayout.setOnCreateContextMenuListener(this)
         binding.executePendingBindings()//use always this line when using bindings and recyclerViews
