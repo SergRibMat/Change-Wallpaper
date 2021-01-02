@@ -101,8 +101,8 @@ class ImageListFragment : Fragment() {
         var dataAsList: ClipData? = data?.clipData
 
         if (dataAsList != null){
-                viewModel.insertImagesIntoDatabase(fromClipDataToList(dataAsList))
-            }else{
+            viewModel.insertImagesIntoDatabase(fromClipDataToList(dataAsList))
+        }else{
             if(data != null){
                 var data: String? = data.dataString
                 viewModel.insertImagesIntoDatabase(listOf(data!!))
@@ -127,7 +127,6 @@ class ImageListFragment : Fragment() {
         }
     }
 
-
     private fun selectImage() {
         val intent = createIntent(Intent.ACTION_OPEN_DOCUMENT, "image/*")
             .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
@@ -141,5 +140,7 @@ class ImageListFragment : Fragment() {
         if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
             oneOrMultiple(data)
         }
+
     }
+
 }

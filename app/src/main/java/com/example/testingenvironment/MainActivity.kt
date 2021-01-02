@@ -21,9 +21,6 @@ import com.karumi.dexter.listener.single.PermissionListener
 
 class MainActivity : AppCompatActivity() {
 
-    init {
-
-    }
 
     companion object {
         private var instance: MainActivity? = null

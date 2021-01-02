@@ -1,5 +1,8 @@
 package com.example.testingenvironment.imagealbum
 
+import android.app.Activity
+import android.content.ClipData
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.*
@@ -15,6 +18,7 @@ import com.example.testingenvironment.R
 import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
 import com.example.testingenvironment.databinding.ImageAlbumItemBinding
+import com.example.testingenvironment.imagelist.REQUEST_IMAGE_GET
 
 
 class ImageAlbumFragment : Fragment() {
@@ -177,6 +181,53 @@ class ImageAlbumFragment : Fragment() {
         }
 
         builder.show()
+    }
+
+    fun oneOrMultiple(data: Intent?){
+        //there is no option. I need to save the images in the app and take that
+        var dataAsList: ClipData? = data?.clipData
+
+        if (dataAsList != null){
+            //viewModel.insertImagesIntoDatabase(fromClipDataToList(dataAsList))
+        }else{
+            if(data != null){
+                var data: String? = data.dataString
+                //viewModel.insertImagesIntoDatabase(listOf(data!!))
+            }
+
+        }
+    }
+
+    private fun fromClipDataToList(data: ClipData): List<String> {
+        val imageList = mutableListOf<String>()
+        for (i in 0 until data.itemCount) {
+            var item = data.getItemAt(i).uri
+            imageList.add(i, item.toString())
+            //printImageWithGlide(this, carro , this.findViewById<ImageView>(R.id.show_picture_imageview))
+        }
+        return imageList.toList()
+    }
+
+    private fun createIntent(action: String, typeString: String): Intent {
+        return Intent(action).apply {
+            type = typeString
+        }
+    }
+
+    private fun selectImage() {
+        val intent = createIntent(Intent.ACTION_OPEN_DOCUMENT, "image/*")
+            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        //if (intent.resolveActivity(packageManager) != null) {
+        startActivityForResult(intent, REQUEST_IMAGE_GET)
+        //}
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
+            oneOrMultiple(data)
+        }
+
     }
 
 }
