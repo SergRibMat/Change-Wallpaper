@@ -1,13 +1,16 @@
 package com.example.testingenvironment.imagealbum
 
 import android.app.Application
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.testingenvironment.MainActivity
 import com.example.testingenvironment.database.Album
 import com.example.testingenvironment.database.AlbumWithImages
 import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabaseDao
+import com.example.testingenvironment.imagelist.saveImageToInternalStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,7 +23,7 @@ class ImageAlbumViewModel(
 
 ) {
 
-    //var declarations
+    //livedata declarations
     private var _albumList = MutableLiveData<List<Album>>()
     val albumList: LiveData<List<Album>>
         get() = _albumList
@@ -33,6 +36,9 @@ class ImageAlbumViewModel(
     private var _navigateToImageList = MutableLiveData<Album>()
     val navigateToImageList: LiveData<Album?>
         get() = _navigateToImageList
+
+    //variable declarations
+    var albumGroup: Int = 1
 
 
     //coroutines
@@ -62,7 +68,6 @@ class ImageAlbumViewModel(
     }
 
     fun loadAlbumsIntoList(){
-
         oiScope.launch {
             _albumList.postValue(dataSource.getAllAlbums())
             loadAlbumWithImagesIntoList()
@@ -104,9 +109,25 @@ class ImageAlbumViewModel(
     fun updateAlbumById(id: Int, name: String){
         oiScope.launch {
             dataSource.updateAlbumByAlbumGroup(id, name)
-            loadAlbumsIntoList()
+            loadAlbumWithImagesIntoList()
         }
 
+    }
+
+    fun insertImagesIntoDatabase(list: List<String>){
+        oiScope.launch {
+            dataSource.insertImageUriList(generateImageUrlList(list))
+            loadAlbumsIntoList()
+        }
+    }
+
+    fun generateImageUrlList(list: List<String>): List<ImageUri>{
+        val imageUriList = mutableListOf<ImageUri>()
+        list.forEach {
+            var uriImageStorage = saveImageToInternalStorage(it.toUri(), MainActivity.applicationContext())
+            imageUriList.add(ImageUri(0, "", uriImageStorage.toString(), albumGroup))
+        }
+        return imageUriList
     }
 
     override fun onCleared() {
@@ -114,9 +135,5 @@ class ImageAlbumViewModel(
         viewModelJob.cancel()
     }
 
-    fun insertImageListToDatabase(){
 
-    }
 }
-
-class IsUpdated(val updated: Boolean)

@@ -11,6 +11,10 @@
         <variable
                 name="albumWithImages"
                 type="com.example.testingenvironment.database.AlbumWithImages"/>
+        <variable
+                name="saveImagesClickListener"
+                type="com.example.testingenvironment.imagealbum.AlbumListener"/>
+
     </data>
     <LinearLayout
             android:layout_width="match_parent"
@@ -65,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Button"
-                    android:onClick="@{() -> clickListener.onClick(albumWithImages.album)}"
+                    android:onClick="@{() -> saveImagesClickListener.onClick(albumWithImages.album)}"
             />
 
         </LinearLayout>

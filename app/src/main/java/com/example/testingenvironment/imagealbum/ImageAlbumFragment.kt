@@ -64,9 +64,15 @@ class ImageAlbumFragment : Fragment() {
 
         setUpObservers()
 
-        binding.albumList.adapter = ImageAlbumRecyclerViewAdapter(AlbumListener { album ->
-            viewModel.navigateToImageListFragment(album)
-        }, ImageAlbumItemRecyclerViewAdapter())
+        binding.albumList.adapter = ImageAlbumRecyclerViewAdapter(
+            AlbumListener { album ->
+                viewModel.navigateToImageListFragment(album)
+            },
+            AlbumListener { album ->
+                viewModel.albumGroup = album.albumGroup
+                selectImage()
+            }, ImageAlbumItemRecyclerViewAdapter()
+        )
     }
 
     private fun setOnClickListener() {
@@ -81,10 +87,11 @@ class ImageAlbumFragment : Fragment() {
         }
     }
 
-    fun setUpObservers(){
+    fun setUpObservers() {
         viewModel.navigateToImageList.observe(viewLifecycleOwner, {
-            if ( null != it ) {
-                this.findNavController().navigate(ImageAlbumFragmentDirections.actionImageAlbumFragmentToImageListFragment(it))
+            if (null != it) {
+                this.findNavController()
+                    .navigate(ImageAlbumFragmentDirections.actionImageAlbumFragmentToImageListFragment(it))
                 viewModel.navigateToImageListFragmentCompleted()
             }
         })
@@ -98,7 +105,7 @@ class ImageAlbumFragment : Fragment() {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-    private fun createNewAlbumAlertDialog(){
+    private fun createNewAlbumAlertDialog() {
         val etFolder = createFolderEditText()
         if (etFolder.parent != null) {
             (etFolder.parent as ViewGroup).removeView(etFolder) // esto soluciona el problema java.lang.IllegalStateException: The specified child already has a parent. You must call removeView() on the child's parent first.
@@ -118,7 +125,7 @@ class ImageAlbumFragment : Fragment() {
             getString(R.string.accept)
         ) { dialogInterface, i ->
             val name = etFolder.text.toString().trim { it <= ' ' }
-            if (name.isNotEmpty()){
+            if (name.isNotEmpty()) {
                 viewModel.saveAlbumIntoDatabase(name)
                 viewModel.loadAlbumWithImagesIntoList()
             }
@@ -154,7 +161,7 @@ class ImageAlbumFragment : Fragment() {
         }
     }
 
-    private fun renameAlbumAlertDialog(id: Int){
+    private fun renameAlbumAlertDialog(id: Int) {
         val etFolder = createFolderEditText()
         if (etFolder.parent != null) {
             (etFolder.parent as ViewGroup).removeView(etFolder) // esto soluciona el problema java.lang.IllegalStateException: The specified child already has a parent. You must call removeView() on the child's parent first.
@@ -174,7 +181,7 @@ class ImageAlbumFragment : Fragment() {
             getString(R.string.accept)
         ) { dialogInterface, i ->
             val name = etFolder.text.toString().trim { it <= ' ' }
-            if (name.isNotEmpty()){
+            if (name.isNotEmpty()) {
                 viewModel.updateAlbumById(id, name)
             }
             dialogInterface.cancel()
@@ -183,16 +190,15 @@ class ImageAlbumFragment : Fragment() {
         builder.show()
     }
 
-    fun oneOrMultiple(data: Intent?){
-        //there is no option. I need to save the images in the app and take that
+    fun oneOrMultiple(data: Intent?) {
         var dataAsList: ClipData? = data?.clipData
 
-        if (dataAsList != null){
-            //viewModel.insertImagesIntoDatabase(fromClipDataToList(dataAsList))
-        }else{
-            if(data != null){
+        if (dataAsList != null) {
+            viewModel.insertImagesIntoDatabase(fromClipDataToList(dataAsList))
+        } else {
+            if (data != null) {
                 var data: String? = data.dataString
-                //viewModel.insertImagesIntoDatabase(listOf(data!!))
+                viewModel.insertImagesIntoDatabase(listOf(data!!))
             }
 
         }

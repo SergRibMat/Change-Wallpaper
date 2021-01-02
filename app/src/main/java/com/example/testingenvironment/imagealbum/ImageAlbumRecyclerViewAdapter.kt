@@ -14,6 +14,7 @@ import com.example.testingenvironment.databinding.ImageAlbumItemBinding
 
 class ImageAlbumRecyclerViewAdapter(
     val clickListener: AlbumListener,
+    val saveImagesClickListener: AlbumListener,
     val imageAlbumItemRecyclerViewAdapter: ImageAlbumItemRecyclerViewAdapter
 ) : ListAdapter<AlbumWithImages, ItemViewHolder>(DiffCallback) {
 
@@ -24,7 +25,11 @@ class ImageAlbumRecyclerViewAdapter(
 
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener, imageAlbumItemRecyclerViewAdapter)
+        holder.bind(
+            getItem(position),
+            clickListener,
+            saveImagesClickListener,
+            imageAlbumItemRecyclerViewAdapter)
     }
 
     companion object DiffCallback :
@@ -48,12 +53,14 @@ class ItemViewHolder constructor(
     fun bind(
         albumWithImages: AlbumWithImages,
         clickListener: AlbumListener,
+        saveImagesClickListener: AlbumListener,
         imageAlbumItemRecyclerViewAdapter: ImageAlbumItemRecyclerViewAdapter
-    ) {//the error is before this
+    ) {
         binding.albumWithImages = albumWithImages
         binding.clickListener = clickListener
+        binding.saveImagesClickListener = saveImagesClickListener
 
-        binding.albumWithImagesImageListGrid.adapter = imageAlbumItemRecyclerViewAdapter
+        binding.albumWithImagesImageListGrid.adapter = ImageAlbumItemRecyclerViewAdapter()
 
         binding.albumItemLinearLayout.setOnCreateContextMenuListener(this)
         binding.executePendingBindings()//use always this line when using bindings and recyclerViews

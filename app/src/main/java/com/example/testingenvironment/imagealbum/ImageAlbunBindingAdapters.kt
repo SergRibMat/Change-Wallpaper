@@ -24,10 +24,23 @@ fun declareAlbumName(textView: TextView, album: Album){
 
 @BindingAdapter("listImageUriData")
 fun bindImageListRecyclerView(recyclerView: RecyclerView, data: List<ImageUri>?) {
-    try {
-        val adapter = recyclerView.adapter as ImageAlbumItemRecyclerViewAdapter
-        adapter.submitList(data)
-    }catch (e: Exception){
+    //si haces debug aqui, data siempre va a ser null, aunque  funcione perfectamente
+    //es como si este metodo cargase todas las listas con las imagenes del ultimo album
+    //
+    //cada vez que este metodo es llamado, pinta una lista en todas las vistas, una y otra vez
+    //hasta que llega a la ultima lista, la pinta y para porque no hay mas albumes
+        try{
+            val adapter = recyclerView.adapter as ImageAlbumItemRecyclerViewAdapter
 
-    }
+            adapter.submitList(data)
+            //hay algunos fallos a la hora de abrir el nuevo intent que seguramente se arreglen
+            //ejecutando ese codigo en otro hilo de ejecucion
+
+            //cuando agregas una imagen nueva desde la pantalla de los albums, no se actualiza la lista de albums
+            //pero cuando entras en un album y vuelves atras, si que lo hace.
+
+        }catch (e: Exception){
+
+        }
+
 }
