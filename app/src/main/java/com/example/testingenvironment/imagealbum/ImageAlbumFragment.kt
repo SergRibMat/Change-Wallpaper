@@ -2,6 +2,7 @@ package com.example.testingenvironment.imagealbum
 
 import android.app.Activity
 import android.content.ClipData
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
 import com.example.testingenvironment.databinding.ImageAlbumItemBinding
 import com.example.testingenvironment.imagelist.REQUEST_IMAGE_GET
+import kotlinx.coroutines.*
 
 
 class ImageAlbumFragment : Fragment() {
@@ -26,6 +28,10 @@ class ImageAlbumFragment : Fragment() {
     lateinit var binding: ImageAlbumFragmentBinding
     private lateinit var viewModel: ImageAlbumViewModel
     private lateinit var imageAlbumItemBinding: ImageAlbumItemBinding
+
+    //coroutine
+    private var getImagesJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main +  getImagesJob)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +70,10 @@ class ImageAlbumFragment : Fragment() {
 
         setUpObservers()
 
+        loadAdapter()
+    }
+
+    fun loadAdapter(){
         binding.albumList.adapter = ImageAlbumRecyclerViewAdapter(
             AlbumListener { album ->
                 viewModel.navigateToImageListFragment(album)
@@ -71,7 +81,7 @@ class ImageAlbumFragment : Fragment() {
             AlbumListener { album ->
                 viewModel.albumGroup = album.albumGroup
                 selectImage()
-            }, ImageAlbumItemRecyclerViewAdapter()
+            }
         )
     }
 
@@ -98,6 +108,9 @@ class ImageAlbumFragment : Fragment() {
     }
 
     private fun showToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+    private fun showToast(context: Context, text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
@@ -231,7 +244,10 @@ class ImageAlbumFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
-            oneOrMultiple(data)
+            uiScope.launch {
+                oneOrMultiple(data)
+                loadAdapter()
+            }
         }
 
     }

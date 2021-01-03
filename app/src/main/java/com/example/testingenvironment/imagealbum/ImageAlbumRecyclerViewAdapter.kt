@@ -3,10 +3,12 @@ package com.example.testingenvironment.imagealbum
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testingenvironment.MainActivity
 import com.example.testingenvironment.R
 import com.example.testingenvironment.database.Album
 import com.example.testingenvironment.database.AlbumWithImages
@@ -14,8 +16,7 @@ import com.example.testingenvironment.databinding.ImageAlbumItemBinding
 
 class ImageAlbumRecyclerViewAdapter(
     val clickListener: AlbumListener,
-    val saveImagesClickListener: AlbumListener,
-    val imageAlbumItemRecyclerViewAdapter: ImageAlbumItemRecyclerViewAdapter
+    val saveImagesClickListener: AlbumListener
 ) : ListAdapter<AlbumWithImages, ItemViewHolder>(DiffCallback) {
 
 
@@ -28,18 +29,17 @@ class ImageAlbumRecyclerViewAdapter(
         holder.bind(
             getItem(position),
             clickListener,
-            saveImagesClickListener,
-            imageAlbumItemRecyclerViewAdapter)
+            saveImagesClickListener)
     }
 
     companion object DiffCallback :
         DiffUtil.ItemCallback<AlbumWithImages>() {
         override fun areItemsTheSame(oldItem: AlbumWithImages, newItem: AlbumWithImages): Boolean {
-            return oldItem.album.name == newItem.album.name
+            return oldItem.album == newItem.album
         }
 
         override fun areContentsTheSame(oldItem: AlbumWithImages, newItem: AlbumWithImages): Boolean {
-            return oldItem.album == newItem.album
+            return oldItem.album.name == newItem.album.name
         }
     }
 
@@ -53,10 +53,10 @@ class ItemViewHolder constructor(
     fun bind(
         albumWithImages: AlbumWithImages,
         clickListener: AlbumListener,
-        saveImagesClickListener: AlbumListener,
-        imageAlbumItemRecyclerViewAdapter: ImageAlbumItemRecyclerViewAdapter
+        saveImagesClickListener: AlbumListener
     ) {
         binding.albumWithImages = albumWithImages
+        //al apretar el boton, esto no se ejecuta
         binding.clickListener = clickListener
         binding.saveImagesClickListener = saveImagesClickListener
 

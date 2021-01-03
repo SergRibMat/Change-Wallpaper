@@ -49,7 +49,6 @@ class ImageAlbumViewModel(
 
     init {
         _navigateToImageList.value = null
-        //loadAlbumsIntoList()
         loadAlbumWithImagesIntoList()
     }
 
@@ -117,7 +116,7 @@ class ImageAlbumViewModel(
     fun insertImagesIntoDatabase(list: List<String>){
         oiScope.launch {
             dataSource.insertImageUriList(generateImageUrlList(list))
-            loadAlbumsIntoList()
+            loadAlbumWithImagesIntoList()
         }
     }
 
