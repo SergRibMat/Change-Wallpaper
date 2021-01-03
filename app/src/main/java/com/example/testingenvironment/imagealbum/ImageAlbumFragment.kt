@@ -7,6 +7,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -19,8 +21,9 @@ import com.example.testingenvironment.R
 import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
 import com.example.testingenvironment.databinding.ImageAlbumItemBinding
-import com.example.testingenvironment.imagelist.REQUEST_IMAGE_GET
 import kotlinx.coroutines.*
+
+const val REQUEST_IMAGE_GET = 101
 
 
 class ImageAlbumFragment : Fragment() {
@@ -74,6 +77,7 @@ class ImageAlbumFragment : Fragment() {
     }
 
     fun loadAdapter(){
+
         binding.albumList.adapter = ImageAlbumRecyclerViewAdapter(
             AlbumListener { album ->
                 viewModel.navigateToImageListFragment(album)
@@ -245,8 +249,10 @@ class ImageAlbumFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_GET && resultCode == Activity.RESULT_OK) {
             uiScope.launch {
+                binding.loadingPb.visibility = VISIBLE
                 oneOrMultiple(data)
                 loadAdapter()
+                binding.loadingPb.visibility = GONE
             }
         }
 
