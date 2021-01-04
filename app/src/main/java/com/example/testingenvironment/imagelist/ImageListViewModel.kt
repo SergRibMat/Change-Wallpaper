@@ -72,6 +72,7 @@ class ImageListViewModel(
     }
 
     override fun onCleared() {
+        viewModelJob.cancel()
         super.onCleared()
     }
 }

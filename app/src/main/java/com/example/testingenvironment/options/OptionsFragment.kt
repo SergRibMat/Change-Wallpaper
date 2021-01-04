@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.testingenvironment.R
+import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.ImageAlbumFragmentBinding
 import com.example.testingenvironment.databinding.OptionsFragmentBinding
+import com.example.testingenvironment.imagealbum.ImageAlbumViewModelFactory
 
 class OptionsFragment : Fragment() {
 
@@ -34,7 +36,15 @@ class OptionsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(OptionsViewModel::class.java)
+
+        val application = requireNotNull(this.activity).application
+
+        //reference to the data sourse
+        val dataSource = ImageUriDatabase.getInstance(application).imageUriDatabaseDao
+
+        val viewModelFactory = OptionsViewModelFactory(dataSource)
+
+        viewModel = ViewModelProvider(this, viewModelFactory).get(OptionsViewModel::class.java)
 
 
         if (binding.activateSetWallpaperSwitch.isChecked){
@@ -45,18 +55,16 @@ class OptionsFragment : Fragment() {
 
         binding.activateSetWallpaperSwitch.isChecked = true
 
-        val adapter: ArrayAdapter<String> = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, stringList())
+        val adapter: ArrayAdapter<String> = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, viewModel.albumNameList())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         binding.albumListSpinner.adapter = adapter
 
+        viewModel.albumList.observe(viewLifecycleOwner, {
+            adapter.addAll(viewModel.albumNameList())
+        })
 
     }
-
-    fun stringList(): List<String> = mutableListOf(
-        "String 1",
-        "String 2",
-        "String 3"
-    )
 
     private fun showToast(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()

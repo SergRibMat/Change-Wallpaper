@@ -3,11 +3,12 @@ package com.example.testingenvironment.database
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 
-@Entity(tableName = "album")
+@Entity(tableName = "album", indices = [Index(value = ["name"], unique = true)])
 @Parcelize
 data class Album (
 

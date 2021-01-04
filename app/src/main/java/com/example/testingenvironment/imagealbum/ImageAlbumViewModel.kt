@@ -1,6 +1,11 @@
 package com.example.testingenvironment.imagealbum
 
 import android.app.Application
+import android.content.Context
+import android.content.ContextWrapper
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,11 +15,15 @@ import com.example.testingenvironment.database.Album
 import com.example.testingenvironment.database.AlbumWithImages
 import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabaseDao
-import com.example.testingenvironment.imagelist.saveImageToInternalStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.util.*
 
 class ImageAlbumViewModel(
     private val dataSource: ImageUriDatabaseDao,
@@ -62,7 +71,7 @@ class ImageAlbumViewModel(
 
     fun saveAlbumIntoDatabase(albumName: String){
         oiScope.launch {
-            dataSource.insertAlbum(Album(albumName, 0))
+             dataSource.insertAlbum(Album(albumName, 0))
         }
     }
 
@@ -127,6 +136,48 @@ class ImageAlbumViewModel(
             imageUriList.add(ImageUri(0, "", uriImageStorage.toString(), albumGroup))
         }
         return imageUriList
+    }
+
+    fun saveImageToInternalStorage(uri: Uri, context: Context): Uri {
+
+        val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+
+        val wrapper = ContextWrapper(context)
+
+        var file = wrapper.getDir("images", Context.MODE_PRIVATE)
+
+
+        // Create a file to save the image
+        //UUID is used for for creating random file names
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            // Get the file output stream
+            val stream: OutputStream = FileOutputStream(file)
+
+            // Compress bitmap
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+
+            // Flush the stream
+            stream.flush()
+
+            // Close stream
+            stream.close()
+        } catch (e: IOException){ // Catch the exception
+            e.printStackTrace()
+        }
+
+        // Return the saved image uri
+        return Uri.parse(file.absolutePath)
+    }
+
+    fun albumAlreadyExists(name: String): Boolean{
+        _albumWithImageList.value?.forEach {
+            if ( it.album.name == name){
+                return true
+            }
+        }
+        return false
     }
 
     override fun onCleared() {

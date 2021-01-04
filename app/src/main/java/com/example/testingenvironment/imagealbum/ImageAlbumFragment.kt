@@ -160,8 +160,13 @@ class ImageAlbumFragment : Fragment() {
         ) { dialogInterface, i ->
             val name = etFolder.text.toString().trim { it <= ' ' }
             if (name.isNotEmpty()) {
-                viewModel.saveAlbumIntoDatabase(name)
-                viewModel.loadAlbumWithImagesIntoList()
+                if (!viewModel.albumAlreadyExists(name)){
+                    viewModel.saveAlbumIntoDatabase(name)
+                    viewModel.loadAlbumWithImagesIntoList()
+                }else{
+                    showToast("Album already exists")
+                }
+
             }
             dialogInterface.cancel()
         }
