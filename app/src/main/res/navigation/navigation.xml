@@ -19,6 +19,7 @@
     >
         <action android:id="@+id/action_imageAlbumFragment_to_imageListFragment"
                 app:destination="@id/imageListFragment"/>
+        <action android:id="@+id/action_imageAlbumFragment_to_optionsFragment" app:destination="@id/optionsFragment"/>
 
     </fragment>
     <fragment android:id="@+id/imageListFragment"
@@ -28,6 +29,20 @@
     >
         <action android:id="@+id/action_imageListFragment_to_detailFragment" app:destination="@id/detailFragment"/>
         <argument android:name="album" app:argType="com.example.testingenvironment.database.Album"/>
+    </fragment>
+    <fragment android:id="@+id/optionsFragment"
+              android:name="com.example.testingenvironment.options.OptionsFragment"
+              android:label="Options Fragment"
+              tools:layout="@layout/options_fragment"
+    >
+    </fragment>
+
+    <fragment android:id="@+id/aboutFragment"
+              android:name="com.example.testingenvironment.about.AboutFragment"
+              android:label="About Fragment"
+              tools:layout="@layout/fragment_about"
+    >
+
     </fragment>
 
 
