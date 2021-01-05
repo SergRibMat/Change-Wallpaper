@@ -1,6 +1,7 @@
 package com.example.testingenvironment.options
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,13 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.*
+import com.example.testingenvironment.MainActivity
+import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.databinding.OptionsFragmentBinding
+import com.example.testingenvironment.worker.SetWallpaperWorker
+import java.util.concurrent.TimeUnit
 
 class OptionsFragment : Fragment() {
 
@@ -48,6 +54,11 @@ class OptionsFragment : Fragment() {
             // do something, the isChecked will be
             // true if the switch is in the On position
             showToast("$isChecked")
+            if (isChecked){
+                scheduleWorker()
+            }else{
+                WorkManager.getInstance().cancelAllWorkByTag(MainActivity.WORKER_NAME)
+            }
         }
 
 
@@ -66,15 +77,28 @@ class OptionsFragment : Fragment() {
 
         binding.albumListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                //showToast("$position")
                 showToast("${parent?.selectedItem.toString()}")
+                //null text control for first time
+                viewModel.getImagesFromAlbum(parent?.selectedItem.toString())//this method fills the livedata
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 showToast("nothing was selected")
             }
-
         }
+
+        viewModel.selectedImagesList.observe(viewLifecycleOwner, {
+            //create worker class?
+            viewModel.assigPeriodicWorkRequestToLiveData()
+        })
+
+    }
+
+    fun scheduleWorker(){
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+            MainActivity.WORKER_NAME,//just the reference to the variable in the companion object
+            ExistingPeriodicWorkPolicy.KEEP,//what to do when there are 2 request enqueued of the same work
+            viewModel.periodicWorkRequest.value!!)
     }
 
     private fun showToast(text: String) {

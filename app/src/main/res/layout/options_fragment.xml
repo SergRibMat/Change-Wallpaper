@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/activate_set_wallpaper_switch"
             android:thumb="@drawable/sw_thumb"
-            android:track="@drawable/sw_track"
+            app:track="@drawable/sw_track"
             app:showText="true"
     />
     <Spinner

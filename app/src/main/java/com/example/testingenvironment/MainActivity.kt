@@ -24,10 +24,13 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private var instance: MainActivity? = null
+        const val WORKER_NAME: String = "CHANGE_WALLPAPER"
 
         fun applicationContext() : Context {
             return instance!!.applicationContext
         }
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
