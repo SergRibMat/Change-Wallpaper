@@ -2,6 +2,7 @@
 <layout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
 >
 <LinearLayout
 
@@ -9,13 +10,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".options.OptionsFragment">
-    <Switch
-            android:text="Switch"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+            android:checked="false"
+            android:text="POWER     "
+            android:textOff="OFF"
+            android:textOn="ON"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/activate_set_wallpaper_switch"/>
+            android:id="@+id/activate_set_wallpaper_switch"
+            android:thumb="@drawable/sw_thumb"
+            android:track="@drawable/sw_track"
+            app:showText="true"
+    />
     <Spinner
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/album_list_spinner"/>
 
