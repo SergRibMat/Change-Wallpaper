@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.*
 import android.view.View.GONE
@@ -78,6 +79,8 @@ class ImageAlbumFragment : Fragment() {
         loadAdapter()
 
         setHasOptionsMenu(true)
+
+        Log.i("ImageAlbumFragment", "ImageAlbumFragment")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

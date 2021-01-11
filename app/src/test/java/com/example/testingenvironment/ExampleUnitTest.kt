@@ -11,7 +11,9 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun addition_isCorrect() {//OK
+        val albumSize = "2"
+        val bool = albumSize.toInt() > 0
+        assertEquals(true, bool)
     }
 }

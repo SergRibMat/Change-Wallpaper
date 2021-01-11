@@ -1,5 +1,6 @@
 package com.example.testingenvironment.options
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class OptionsViewModel(
-    private val dataSource: ImageUriDatabaseDao,
+    private val dataSource: ImageUriDatabaseDao
 ) : ViewModel() {
 
     private var _albumList = MutableLiveData<List<Album>>()
@@ -40,7 +41,9 @@ class OptionsViewModel(
 
     init {
         saveAlbumsIntoList()
+        //"Create an object in the viewmodel to hold the state of the options and save it into the database"
     }
+
 
     //methods to add
     //empty builder
@@ -48,8 +51,10 @@ class OptionsViewModel(
 
     fun inputDataToWorker(): Data{
         val builder = Data.Builder()
+        //add the size to the builder
+        builder.putString("size", "${_selectedImagesList.value?.size}")
         builder?.let {
-            selectedImagesList.value?.forEach {
+            _selectedImagesList.value?.forEach {
                 builder.putString("${it.id}", it.pathToImage)
             }
         }

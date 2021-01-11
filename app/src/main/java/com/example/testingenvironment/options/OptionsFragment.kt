@@ -3,6 +3,7 @@ package com.example.testingenvironment.options
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,32 +50,37 @@ class OptionsFragment : Fragment() {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(OptionsViewModel::class.java)
 
+        createSpinnerWithAdapter()
 
-        binding.activateSetWallpaperSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            // do something, the isChecked will be
-            // true if the switch is in the On position
-            showToast("$isChecked")
-            if (isChecked){
-                scheduleWorker()
-            }else{
-                WorkManager.getInstance().cancelAllWorkByTag(MainActivity.WORKER_NAME)
-            }
-        }
+        createSpinnerListener()
 
+        createSwitchListener()
 
-        val adapter: ArrayAdapter<String> = ArrayAdapter(
-            context!!,
-            android.R.layout.simple_spinner_item,
-            viewModel.albumNameList()
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        binding.albumListSpinner.adapter = adapter
-
-        viewModel.albumList.observe(viewLifecycleOwner, {
-            adapter.addAll(viewModel.albumNameList())
+        viewModel.selectedImagesList.observe(viewLifecycleOwner, {
+            //create worker class?
+            viewModel.assigPeriodicWorkRequestToLiveData()
         })
 
+    }
+
+    fun createSwitchListener(){
+        /*"this method is not executed unless you click the button, " +
+                "so i need to save the state of this button in the database")*/
+
+
+        binding.activateSetWallpaperSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                //save button state into database
+
+                scheduleWorker()
+            }else{
+                showToast("Ejecutado")
+                WorkManager.getInstance().cancelUniqueWork(MainActivity.WORKER_NAME)//este funciona
+            }
+        }
+    }
+
+    fun createSpinnerListener(){
         binding.albumListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 showToast("${parent?.selectedItem.toString()}")
@@ -86,12 +92,25 @@ class OptionsFragment : Fragment() {
                 showToast("nothing was selected")
             }
         }
+    }
 
-        viewModel.selectedImagesList.observe(viewLifecycleOwner, {
-            //create worker class?
-            viewModel.assigPeriodicWorkRequestToLiveData()
+    fun createSpinnerWithAdapter(){
+        val adapter: ArrayAdapter<String> = ArrayAdapter(
+            context!!,
+            android.R.layout.simple_spinner_item,
+            viewModel.albumNameList()
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        binding.albumListSpinner.adapter = adapter
+
+        declareObserverRefreshAdapter(adapter)
+    }
+
+    fun declareObserverRefreshAdapter(adapter: ArrayAdapter<String> ){
+        viewModel.albumList.observe(viewLifecycleOwner, {
+            adapter.addAll(viewModel.albumNameList())
         })
-
     }
 
     fun scheduleWorker(){
@@ -111,5 +130,7 @@ class OptionsFragment : Fragment() {
     private fun showToast(text: Int) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
+
+
 
 }
