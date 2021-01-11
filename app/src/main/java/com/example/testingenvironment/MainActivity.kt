@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         NavigationUI.setupActionBarWithNavController(this, navController)
 
-
+        //Can i dictate from here which is the first Fragment i want to show? Can it follow navigation?
 
 
     }
