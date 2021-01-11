@@ -175,90 +175,10 @@ class ExampleInstrumentedTest {
         assertEquals(album.name, "Sergio")
     }
 
-}
-
-//@Rule
-//val instantTaskExecutorRule = InstantTaskExecutorRule()
-
-
-//@Rule
-//val testRule = InstantTaskExecutorRule()
-
-@RunWith(JUnit4::class)
-class ImageAlbumViewModelTest{
-
-    @get:Rule // -> allows liveData to work on different thread besides main, must be public!
-    //var executorRule = InstantTaskExecutorRule()
-
-    private lateinit var dao: ImageUriDatabaseDao
-
-    private lateinit var viewModel: ImageAlbumViewModel
-    private lateinit var mockObserver: Observer<List<Album>>
-
-
-    @Before
-    fun setUp() {
-        //setup view model with dependencies mocked
-        dao = mock(ImageUriDatabaseDao::class.java)
-        viewModel = ImageAlbumViewModel(this.dao, Application())
-        //mock the live data observer
-        viewModel.albumList.observeForever {  }
-    }
-
     @Test
-    fun fetchUserRepositories_positiveResponse() {
-        // Mock API response
-        Mockito.`when`(dao.getAllAlbums()).thenAnswer {
-            listOf(
-                Album("First Album", 1),
-                Album("Second Album", 2)
-            )
-        }
-        // Attacch fake observer
-        //val observer = mock(Observer::class.java) as Observer<List<Album>>
-        //viewModel.albumList.observeForever(observer)
-        // Invoke
-        viewModel.loadAlbumsIntoList()
-        // Verify
-        //assertNotNull(viewModel.albumList.value)
-        assertEquals(
-            listOf(
-                Album("First Album", 1),
-                Album("Second Album", 2)
-            ), viewModel.albumList.getOrAwaitValue()
-        )
+    fun getAlbumByNameTest(){//OK
+        val album = imageUriDao.getAlbumByName("Second Album")
+        assertEquals(2, album.albumGroup)
     }
-
-
 
 }
-
-
-
-/* Copyright 2019 Google LLC.
-   SPDX-License-Identifier: Apache-2.0 */
-fun <T> LiveData<T>.getOrAwaitValue(
-    time: Long = 2,
-    timeUnit: TimeUnit = TimeUnit.SECONDS
-): T {
-    var data: T? = null
-    val latch = CountDownLatch(1)
-    val observer = object : Observer<T> {
-        override fun onChanged(o: T?) {
-            data = o
-            latch.countDown()
-            this@getOrAwaitValue.removeObserver(this)
-        }
-    }
-
-    this.observeForever(observer)
-
-    // Don't wait indefinitely if the LiveData is not set.
-    if (!latch.await(time, timeUnit)) {
-        throw TimeoutException("LiveData value was never set.")
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    return data as T
-}
-

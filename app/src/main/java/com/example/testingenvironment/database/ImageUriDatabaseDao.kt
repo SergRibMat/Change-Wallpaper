@@ -17,11 +17,17 @@ interface ImageUriDatabaseDao {
     @Insert
     fun insertImageUri(imageUri: ImageUri)
 
+    @Update
+    fun updateOptionsData(optionsData: OptionsData)
+
     fun insertImageUriList(list: List<ImageUri>){
         list.forEach {imageUri ->
             insertImageUri(imageUri)
         }
     }
+
+    @Query("SELECT * FROM album WHERE name = :name")
+    fun getAlbumByName(name: String): Album
 
     @Query("UPDATE  album SET name = :name WHERE albumGroup = :albumGroup")
     fun updateAlbumByAlbumGroup(albumGroup: Int, name: String)

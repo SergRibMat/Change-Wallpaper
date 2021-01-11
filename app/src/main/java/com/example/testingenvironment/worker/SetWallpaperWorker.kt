@@ -7,27 +7,40 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.bumptech.glide.Glide
 import com.example.testingenvironment.MainActivity
+import com.example.testingenvironment.database.ImageUriDatabase
 
 class SetWallpaperWorker (appContext: Context, params: WorkerParameters):
     CoroutineWorker(appContext, params) {
 
+
+
     override suspend fun doWork(): Result {
+
+        //reference to the data sourse
+        val albumGroup = inputData.getString("album")
+        val dataSource = ImageUriDatabase.getInstance(applicationContext).imageUriDatabaseDao
+        Log.i("SetWallpaperWorker", "Album id =  $albumGroup")
+        val albumList =dataSource.getImagesFromAlbum(albumGroup!!.toInt())
+
         try{
-            val albumSize = getAlbumSizeAsInt()
+            val albumSize = albumList.size
 
             if (!albumNotEmpty(albumSize)){
+                Log.i("SetWallpaperWorker", "size of album $albumSize")
                 return Result.success()
             }
-            val resourceUri = inputData.getString("${generateRandomNumber(albumSize)}").toString()
+            val imageUriObject = dataSource.getImageUriById(generateRandomNumber(albumSize))
             //save the used images in the database so there is no repited images
             val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(applicationContext)
             if (wallpaperManager.isSetWallpaperAllowed) {
-                wallpaperManager.setBitmap(getImageWithGlide(resourceUri))
+                wallpaperManager.setBitmap(getImageWithGlide(imageUriObject.pathToImage))
+                Log.i("SetWallpaperWorker", "Changed wallpaper image")
             }
-            Log.i("casa", "casa")
+            Log.i("SetWallpaperWorker", "Executed success")
 
             return Result.success()
         }catch (e: Exception){
+            Log.i("SetWallpaperWorker", "Executed failure Exception")
             return Result.failure()
         }
 

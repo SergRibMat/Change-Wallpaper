@@ -50,16 +50,17 @@ class OptionsFragment : Fragment() {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(OptionsViewModel::class.java)
 
-        createSpinnerWithAdapter()
-
-        createSpinnerListener()
+        viewModel.album.observe(viewLifecycleOwner, { album ->
+            showToast("Album Observer was executed")
+            viewModel.assigPeriodicWorkRequestToLiveData()
+            binding.activateSetWallpaperSwitch.isChecked = false
+        })
 
         createSwitchListener()
 
-        viewModel.selectedImagesList.observe(viewLifecycleOwner, {
-            //create worker class?
-            viewModel.assigPeriodicWorkRequestToLiveData()
-        })
+        createSpinnerWithAdapter()
+
+        createSpinnerListener()
 
     }
 
@@ -73,6 +74,7 @@ class OptionsFragment : Fragment() {
                 //save button state into database
 
                 scheduleWorker()
+                showToast("WORK SCHEDULED")
             }else{
                 showToast("Ejecutado")
                 WorkManager.getInstance().cancelUniqueWork(MainActivity.WORKER_NAME)//este funciona
@@ -83,8 +85,6 @@ class OptionsFragment : Fragment() {
     fun createSpinnerListener(){
         binding.albumListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                showToast("${parent?.selectedItem.toString()}")
-                //null text control for first time
                 viewModel.getImagesFromAlbum(parent?.selectedItem.toString())//this method fills the livedata
             }
 

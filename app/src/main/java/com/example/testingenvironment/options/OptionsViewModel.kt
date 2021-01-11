@@ -11,6 +11,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import com.example.testingenvironment.database.Album
 import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabaseDao
+import com.example.testingenvironment.database.OptionsData
 import com.example.testingenvironment.worker.SetWallpaperWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,14 +27,18 @@ class OptionsViewModel(
     val albumList: LiveData<List<Album>>
         get() = _albumList
 
-    private var _selectedImagesList = MutableLiveData<List<ImageUri>>()
-    val selectedImagesList: LiveData<List<ImageUri>>
-        get() = _selectedImagesList
+    private var _album = MutableLiveData<Album>()
+    val album: LiveData<Album>
+        get() = _album
 
 
     private var _periodicWorkRequest = MutableLiveData<PeriodicWorkRequest>()
     val periodicWorkRequest: LiveData<PeriodicWorkRequest>
         get() = _periodicWorkRequest
+
+    private var _optionsData = MutableLiveData<OptionsData>()
+    val optionsData: LiveData<OptionsData>
+        get() = _optionsData
 
     //coroutines
     private var viewModelJob = Job()
@@ -52,12 +57,7 @@ class OptionsViewModel(
     fun inputDataToWorker(): Data{
         val builder = Data.Builder()
         //add the size to the builder
-        builder.putString("size", "${_selectedImagesList.value?.size}")
-        builder?.let {
-            _selectedImagesList.value?.forEach {
-                builder.putString("${it.id}", it.pathToImage)
-            }
-        }
+        builder.putString("album", "${album.value?.albumGroup.toString()}")
         return builder.build()
     }
 
@@ -76,7 +76,6 @@ class OptionsViewModel(
         ioScope.launch {
             _albumList.postValue(dataSource.getAllAlbums())
         }
-
     }
 
     fun assigPeriodicWorkRequestToLiveData(){
@@ -85,7 +84,8 @@ class OptionsViewModel(
 
     fun getImagesFromAlbum(name: String){
         ioScope.launch {
-            _selectedImagesList.postValue(dataSource.getImagesFromAlbum(1))
+            val album = dataSource.getAlbumByName(name)
+            _album.postValue(album)
         }
     }
 

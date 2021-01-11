@@ -106,6 +106,11 @@ class MainActivity : AppCompatActivity() {
 
     )
 
+    override fun onDestroy() {
+        super.onDestroy()
+        //init background permanent Service
+    }
+
 
 
 }
