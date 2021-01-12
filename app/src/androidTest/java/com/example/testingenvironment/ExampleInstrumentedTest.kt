@@ -6,10 +6,7 @@ import androidx.lifecycle.*
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.testingenvironment.database.Album
-import com.example.testingenvironment.database.ImageUri
-import com.example.testingenvironment.database.ImageUriDatabase
-import com.example.testingenvironment.database.ImageUriDatabaseDao
+import com.example.testingenvironment.database.*
 import com.example.testingenvironment.imagealbum.ImageAlbumViewModel
 import org.junit.After
 import org.junit.Assert.*
@@ -51,6 +48,7 @@ class ExampleInstrumentedTest {
 
         insertAlbums()
         insertImageUri()
+        insertOptionsDataTest()
     }
 
     @After
@@ -181,4 +179,27 @@ class ExampleInstrumentedTest {
         assertEquals(2, album.albumGroup)
     }
 
+    @Test
+    fun getOptionsDataTest(){//OK
+        val obj = imageUriDao.getOptionsDataById(1L)
+        assertEquals(1L, obj.id)
+    }
+
+    fun insertOptionsDataTest(){//OK
+        imageUriDao.insertOptionsData(OptionsData(0L, true, "Sergio", 20, "minutes"))
+    }
+
+    @Test
+    fun updateOptionsDataTest(){//OK
+        imageUriDao.updateOptionsData(
+            OptionsData(
+            1L,
+                false,
+                "Silvia",
+                30,
+                "days"
+        ))
+        val obj = imageUriDao.getOptionsDataById(1L)
+        assertEquals(false, obj.isSelected)
+    }
 }

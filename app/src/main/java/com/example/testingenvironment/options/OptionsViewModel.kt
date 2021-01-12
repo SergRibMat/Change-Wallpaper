@@ -9,7 +9,6 @@ import androidx.work.Data
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import com.example.testingenvironment.database.Album
-import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabaseDao
 import com.example.testingenvironment.database.OptionsData
 import com.example.testingenvironment.worker.SetWallpaperWorker
@@ -46,13 +45,31 @@ class OptionsViewModel(
 
     init {
         saveAlbumsIntoList()
+        saveOptionsDataFirstTime()
         //"Create an object in the viewmodel to hold the state of the options and save it into the database"
     }
 
+    private fun saveOptionsDataFirstTime(){
+        ioScope.launch {
+            val optionsData = dataSource.getOptionsDataById(1)
+            if (optionsData != null){
+                _optionsData.postValue(optionsData)
+            }else{
+                dataSource.insertOptionsData(
+                    OptionsData(
+                        0L,
+                        false,
+                        "Empty",
+                        20L,
+                        0
+                    )
+                )
+                _optionsData.postValue(dataSource.getOptionsDataById(1))
+            }
 
-    //methods to add
-    //empty builder
-    //fill builder
+        }
+
+    }
 
     fun inputDataToWorker(): Data{
         val builder = Data.Builder()
@@ -61,9 +78,19 @@ class OptionsViewModel(
         return builder.build()
     }
 
+    fun updateOptionsDataDatabase(){
+        ioScope.launch {
+            Log.i("OptionsViewModel", "updateOptionsDataDatabase content of " +
+                    "Options data switchState= ${_optionsData.value!!.isSelected} " +
+                    "albumName = ${_optionsData.value!!.selectedAlbum}")
+
+            dataSource.updateOptionsData(_optionsData.value!!)
+        }
+    }
+
     fun createWorkerClass() = PeriodicWorkRequestBuilder<SetWallpaperWorker>(//ejecutar dentro de observer porque es imprescindible que livedata lleno
-        20,
-        TimeUnit.MINUTES)
+        _optionsData.value!!.time,
+        getTimeUnit(_optionsData.value!!.timeUnitInt))
         .setConstraints(setWallpaperWorkerConstraints())
         .setInputData(inputDataToWorker())//cuidado con cuando ejecutas este metodo.
         .build()
@@ -74,7 +101,9 @@ class OptionsViewModel(
 
     fun saveAlbumsIntoList(){
         ioScope.launch {
-            _albumList.postValue(dataSource.getAllAlbums())
+            var albumList = dataSource.getAllAlbums()
+            if (albumList.isEmpty()) albumList = listOf(Album("Empty", 0))
+            _albumList.postValue(albumList)
         }
     }
 
@@ -97,6 +126,13 @@ class OptionsViewModel(
         }
 
         return list
+    }
+
+    fun getTimeUnit(timeUnitInt: Int) = when(timeUnitInt) {
+        0   -> TimeUnit.MINUTES
+        1   -> TimeUnit.DAYS
+        2   -> TimeUnit.HOURS
+        else -> TimeUnit.HOURS
     }
 
     override fun onCleared() {

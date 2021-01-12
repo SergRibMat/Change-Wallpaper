@@ -11,10 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testingenvironment.MainActivity
-import com.example.testingenvironment.database.Album
-import com.example.testingenvironment.database.AlbumWithImages
-import com.example.testingenvironment.database.ImageUri
-import com.example.testingenvironment.database.ImageUriDatabaseDao
+import com.example.testingenvironment.database.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -59,7 +56,10 @@ class ImageAlbumViewModel(
     init {
         _navigateToImageList.value = null
         loadAlbumWithImagesIntoList()
+
     }
+
+
 
     fun loadAlbumWithImagesIntoList(){
         oiScope.launch {

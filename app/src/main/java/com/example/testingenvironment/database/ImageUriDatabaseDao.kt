@@ -17,6 +17,9 @@ interface ImageUriDatabaseDao {
     @Insert
     fun insertImageUri(imageUri: ImageUri)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOptionsData(optionsData: OptionsData)
+
     @Update
     fun updateOptionsData(optionsData: OptionsData)
 
@@ -25,6 +28,9 @@ interface ImageUriDatabaseDao {
             insertImageUri(imageUri)
         }
     }
+
+    @Query("SELECT * FROM options_data WHERE id = :id")
+    fun getOptionsDataById(id: Long): OptionsData
 
     @Query("SELECT * FROM album WHERE name = :name")
     fun getAlbumByName(name: String): Album

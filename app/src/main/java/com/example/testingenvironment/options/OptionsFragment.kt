@@ -16,6 +16,7 @@ import androidx.work.*
 import com.example.testingenvironment.MainActivity
 import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabase
+import com.example.testingenvironment.database.OptionsData
 import com.example.testingenvironment.databinding.OptionsFragmentBinding
 import com.example.testingenvironment.worker.SetWallpaperWorker
 import java.util.concurrent.TimeUnit
@@ -51,14 +52,18 @@ class OptionsFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(OptionsViewModel::class.java)
 
         viewModel.album.observe(viewLifecycleOwner, { album ->
-            showToast("Album Observer was executed")
             viewModel.assigPeriodicWorkRequestToLiveData()
-            binding.activateSetWallpaperSwitch.isChecked = false
+            //binding.activateSetWallpaperSwitch.isChecked = false
+            Log.i("OptionsFragment.", "assigPeriodicWorkRequestToLiveData()")
         })
 
-        createSwitchListener()
+        setDefaultValuesToUI()
 
         createSpinnerWithAdapter()
+
+        //setDefaultValuesToUI()
+
+        createSwitchListener()
 
         createSpinnerListener()
 
@@ -67,29 +72,37 @@ class OptionsFragment : Fragment() {
     fun createSwitchListener(){
         /*"this method is not executed unless you click the button, " +
                 "so i need to save the state of this button in the database")*/
-
-
         binding.activateSetWallpaperSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
-                //save button state into database
+                val albumName = viewModel.optionsData.value!!.selectedAlbum
 
-                scheduleWorker()
-                showToast("WORK SCHEDULED")
+                if(albumName != null && albumName != "Empty"){
+
+                    scheduleWorker()
+                    showToast("WORK SCHEDULED")
+                }else{
+                    showToast("NULL")
+                    binding.activateSetWallpaperSwitch.isChecked = false
+                }
             }else{
-                showToast("Ejecutado")
                 WorkManager.getInstance().cancelUniqueWork(MainActivity.WORKER_NAME)//este funciona
+                showToast("WORKMANAGER CANCELADO")
             }
+
+            viewModel.optionsData.value!!.isSelected = binding.activateSetWallpaperSwitch.isChecked
         }
     }
 
     fun createSpinnerListener(){
         binding.albumListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                viewModel.getImagesFromAlbum(parent?.selectedItem.toString())//this method fills the livedata
+                val albumSelected = parent?.selectedItem.toString().trim()
+                showToast("$albumSelected")
+                viewModel.getImagesFromAlbum(albumSelected)//this method fills the livedata
+                viewModel.optionsData.value!!.selectedAlbum = albumSelected
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                showToast("nothing was selected")
             }
         }
     }
@@ -105,6 +118,14 @@ class OptionsFragment : Fragment() {
         binding.albumListSpinner.adapter = adapter
 
         declareObserverRefreshAdapter(adapter)
+
+    }
+
+    private fun setDbOptionAtPositionInSpinner(optionsData: OptionsData) {
+
+        val snipperAdapter = binding.albumListSpinner.adapter as ArrayAdapter<String>
+        val itemPosition = snipperAdapter.getPosition(optionsData.selectedAlbum)
+        binding.albumListSpinner.setSelection(itemPosition, true)
     }
 
     fun declareObserverRefreshAdapter(adapter: ArrayAdapter<String> ){
@@ -114,10 +135,24 @@ class OptionsFragment : Fragment() {
     }
 
     fun scheduleWorker(){
-        WorkManager.getInstance().enqueueUniquePeriodicWork(
-            MainActivity.WORKER_NAME,//just the reference to the variable in the companion object
-            ExistingPeriodicWorkPolicy.KEEP,//what to do when there are 2 request enqueued of the same work
-            viewModel.periodicWorkRequest.value!!)
+        if(viewModel.periodicWorkRequest.value != null){
+            WorkManager.getInstance().enqueueUniquePeriodicWork(
+                MainActivity.WORKER_NAME,//just the reference to the variable in the companion object
+                ExistingPeriodicWorkPolicy.KEEP,//what to do when there are 2 request enqueued of the same work
+                viewModel.periodicWorkRequest.value!!)
+        }
+
+    }
+
+    private fun setDefaultValuesToUI(){
+
+        //default value for snipper is in createSpinnerWithAdapter()
+        viewModel.optionsData.observe(viewLifecycleOwner, { optionsData ->
+            binding.activateSetWallpaperSwitch.isChecked = optionsData.isSelected
+            setDbOptionAtPositionInSpinner(optionsData)
+        })
+
+        //set radio buttons default value
     }
 
     private fun showToast(text: String) {
@@ -129,6 +164,11 @@ class OptionsFragment : Fragment() {
 
     private fun showToast(text: Int) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.updateOptionsDataDatabase()
     }
 
 

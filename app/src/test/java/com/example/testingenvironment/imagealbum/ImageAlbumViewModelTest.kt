@@ -4,10 +4,7 @@ import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.example.testingenvironment.database.Album
-import com.example.testingenvironment.database.AlbumWithImages
-import com.example.testingenvironment.database.ImageUri
-import com.example.testingenvironment.database.ImageUriDatabaseDao
+import com.example.testingenvironment.database.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Ignore
@@ -41,6 +38,22 @@ class FakeImageUriDatabaseDao : ImageUriDatabaseDao{
     }
 
     override fun insertImageUri(imageUri: ImageUri) {
+        TODO("Not yet implemented")
+    }
+
+    override fun insertOptionsData(optionsData: OptionsData) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateOptionsData(optionsData: OptionsData) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getOptionsDataById(id: Long): OptionsData {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAlbumByName(name: String): Album {
         TODO("Not yet implemented")
     }
 
