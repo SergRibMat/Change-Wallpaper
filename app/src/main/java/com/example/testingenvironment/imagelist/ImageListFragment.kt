@@ -29,11 +29,7 @@ class ImageListFragment : Fragment() {
 
         binding = ImageListFragmentBinding.inflate(inflater)
 
-
         binding.lifecycleOwner = this
-
-        setButtonListeners()
-
 
         return binding.root
     }
@@ -50,8 +46,6 @@ class ImageListFragment : Fragment() {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(ImageListViewModel::class.java)
 
-        toDetailListener()
-
         binding.viewModel = viewModel
 
         binding.imageListGrid.adapter = ImageListRecycleViewAdapter(ImageUriClickListener { imageUri ->
@@ -66,11 +60,6 @@ class ImageListFragment : Fragment() {
         return args.album.albumGroup
     }
 
-    private fun setButtonListeners() {
-        binding.addImagesBtn.setOnClickListener {
-        }
-    }
-
     private fun declareObservers() {
         viewModel.navigateToDetail.observe(viewLifecycleOwner, {
             if ( null != it ) {
@@ -78,12 +67,6 @@ class ImageListFragment : Fragment() {
                 viewModel.navigateToDetailFragmentCompleted()
             }
         })
-    }
-
-    fun toDetailListener(){
-        binding.navToDetailBtn.setOnClickListener {
-
-        }
     }
 
     private fun showToast(text: String) {

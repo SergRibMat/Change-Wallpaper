@@ -186,7 +186,7 @@ class ExampleInstrumentedTest {
     }
 
     fun insertOptionsDataTest(){//OK
-        imageUriDao.insertOptionsData(OptionsData(0L, true, "Sergio", 20, "minutes"))
+        imageUriDao.insertOptionsData(OptionsData(0L, true, "Sergio", 20, 0))
     }
 
     @Test
@@ -197,7 +197,7 @@ class ExampleInstrumentedTest {
                 false,
                 "Silvia",
                 30,
-                "days"
+                0
         ))
         val obj = imageUriDao.getOptionsDataById(1L)
         assertEquals(false, obj.isSelected)
