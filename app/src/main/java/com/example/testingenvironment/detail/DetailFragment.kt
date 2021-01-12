@@ -37,7 +37,7 @@ class DetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        // TODO: Use the ViewModel
+
 
 
         val args = DetailFragmentArgs.fromBundle(requireArguments())
@@ -46,7 +46,6 @@ class DetailFragment : Fragment() {
             setWallpaperMethod(it.pathToImage, this.context!!)
         }
 
-        showToast("Nombre objeto= ${args.ImageUri.name} y path ${args.ImageUri.pathToImage}")
     }
 
     private fun showToast(text: String) {

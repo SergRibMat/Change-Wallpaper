@@ -61,8 +61,6 @@ class OptionsFragment : Fragment() {
 
         createSpinnerWithAdapter()
 
-        //setDefaultValuesToUI()
-
         createSwitchListener()
 
         createSpinnerListener()
@@ -70,8 +68,6 @@ class OptionsFragment : Fragment() {
     }
 
     fun createSwitchListener(){
-        /*"this method is not executed unless you click the button, " +
-                "so i need to save the state of this button in the database")*/
         binding.activateSetWallpaperSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
                 val albumName = viewModel.optionsData.value!!.selectedAlbum
@@ -79,14 +75,14 @@ class OptionsFragment : Fragment() {
                 if(albumName != null && albumName != "Empty"){
 
                     scheduleWorker()
-                    showToast("WORK SCHEDULED")
+
                 }else{
-                    showToast("NULL")
+                    showToast("You need to select an album")
                     binding.activateSetWallpaperSwitch.isChecked = false
                 }
             }else{
                 WorkManager.getInstance().cancelUniqueWork(MainActivity.WORKER_NAME)//este funciona
-                showToast("WORKMANAGER CANCELADO")
+                showToast("Change Wallpaper Process is OFF")
             }
 
             viewModel.optionsData.value!!.isSelected = binding.activateSetWallpaperSwitch.isChecked
@@ -97,7 +93,6 @@ class OptionsFragment : Fragment() {
         binding.albumListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val albumSelected = parent?.selectedItem.toString().trim()
-                showToast("$albumSelected")
                 viewModel.getImagesFromAlbum(albumSelected)//this method fills the livedata
                 viewModel.optionsData.value!!.selectedAlbum = albumSelected
             }
@@ -140,6 +135,7 @@ class OptionsFragment : Fragment() {
                 MainActivity.WORKER_NAME,//just the reference to the variable in the companion object
                 ExistingPeriodicWorkPolicy.KEEP,//what to do when there are 2 request enqueued of the same work
                 viewModel.periodicWorkRequest.value!!)
+            showToast("Change Wallpaper Process is ON")
         }
 
     }
