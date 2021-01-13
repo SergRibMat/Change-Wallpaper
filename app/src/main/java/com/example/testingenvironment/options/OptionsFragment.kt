@@ -100,6 +100,7 @@ class OptionsFragment : Fragment() {
                 if(albumName != null && albumName != "Empty"){
 
                         scheduleWorker()
+                        enableOptionViews(false)
 
                 }else{
                     showToast("You need to select an album")
@@ -108,6 +109,7 @@ class OptionsFragment : Fragment() {
             }else{
                 WorkManager.getInstance().cancelUniqueWork(MainActivity.WORKER_NAME)//este funciona
                 showToast("Change Wallpaper Process is OFF")
+                enableOptionViews(true)
             }
             Log.i("EL BOOLEAN DA", "${binding.activateSetWallpaperSwitch.isChecked}")
             viewModel.optionsData.value!!.isSelected = binding.activateSetWallpaperSwitch.isChecked
@@ -197,6 +199,18 @@ class OptionsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         viewModel.updateOptionsDataDatabase()
+    }
+
+    fun enableOptionViews(condition: Boolean){
+        binding.albumListSpinner.isEnabled = condition
+        binding.timeRd.isEnabled = condition
+        binding.radioButton1.isEnabled = condition
+        binding.radioButton2.isEnabled = condition
+        binding.radioButton3.isEnabled = condition
+        binding.radioButton4.isEnabled = condition
+        binding.radioButton5.isEnabled = condition
+        binding.radioButton6.isEnabled = condition
+
     }
 
 
