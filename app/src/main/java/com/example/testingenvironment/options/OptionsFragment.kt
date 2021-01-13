@@ -1,7 +1,6 @@
 package com.example.testingenvironment.options
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.example.testingenvironment.MainActivity
-import com.example.testingenvironment.database.ImageUri
 import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.database.OptionsData
 import com.example.testingenvironment.databinding.OptionsFragmentBinding
-import com.example.testingenvironment.worker.SetWallpaperWorker
-import java.util.concurrent.TimeUnit
 
 class OptionsFragment : Fragment() {
 
@@ -74,7 +70,9 @@ class OptionsFragment : Fragment() {
 
                 if(albumName != null && albumName != "Empty"){
 
-                    scheduleWorker()
+                        scheduleWorker()
+
+
 
                 }else{
                     showToast("You need to select an album")
@@ -93,8 +91,13 @@ class OptionsFragment : Fragment() {
         binding.albumListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val albumSelected = parent?.selectedItem.toString().trim()
-                viewModel.getImagesFromAlbum(albumSelected)//this method fills the livedata
+                viewModel.getAlbumByName(albumSelected)//this method fills the livedata
                 viewModel.optionsData.value!!.selectedAlbum = albumSelected
+
+                //Each time you change album, it forces the switch button to off so the user clicks it again and recreate the process
+                binding.activateSetWallpaperSwitch.isChecked = false
+                viewModel.optionsData.value!!.isSelected = binding.activateSetWallpaperSwitch.isChecked
+                //if album changed, put switch to false
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

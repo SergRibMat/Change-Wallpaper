@@ -30,7 +30,6 @@ class OptionsViewModel(
     val album: LiveData<Album>
         get() = _album
 
-
     private var _periodicWorkRequest = MutableLiveData<PeriodicWorkRequest>()
     val periodicWorkRequest: LiveData<PeriodicWorkRequest>
         get() = _periodicWorkRequest
@@ -80,10 +79,6 @@ class OptionsViewModel(
 
     fun updateOptionsDataDatabase(){
         ioScope.launch {
-            Log.i("OptionsViewModel", "updateOptionsDataDatabase content of " +
-                    "Options data switchState= ${_optionsData.value!!.isSelected} " +
-                    "albumName = ${_optionsData.value!!.selectedAlbum}")
-
             dataSource.updateOptionsData(_optionsData.value!!)
         }
     }
@@ -111,7 +106,7 @@ class OptionsViewModel(
         _periodicWorkRequest.value = createWorkerClass()
     }
 
-    fun getImagesFromAlbum(name: String){
+    fun getAlbumByName(name: String){
         ioScope.launch {
             val album = dataSource.getAlbumByName(name)
             _album.postValue(album)

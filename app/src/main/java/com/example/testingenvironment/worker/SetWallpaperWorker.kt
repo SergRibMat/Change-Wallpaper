@@ -25,8 +25,8 @@ class SetWallpaperWorker (appContext: Context, params: WorkerParameters):
         try{
             val albumSize = albumList.size
 
-            if (!albumNotEmpty(albumSize)){
-                Log.i("SetWallpaperWorker", "size of album $albumSize")
+            if (!albumBiggerThan(albumSize, 2)){
+                Log.i("SetWallpaperWorker", "size of album $albumSize and it wasn't executed" )
                 return Result.success()
             }
             val imageUriObject = dataSource.getImageUriById(generateRandomNumber(albumSize))
@@ -57,7 +57,7 @@ class SetWallpaperWorker (appContext: Context, params: WorkerParameters):
         //y se seguira ejecutando cada X desde que entras a menos que lo pares
     }
 
-    private fun albumNotEmpty(albumSize: Int): Boolean = albumSize > 0
+    private fun albumBiggerThan(albumSize: Int, minimum: Int): Boolean = albumSize > minimum
 
 
     private fun getAlbumSizeAsInt(): Int = inputData.getString("size").toString().toInt()
