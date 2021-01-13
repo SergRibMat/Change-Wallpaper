@@ -56,10 +56,40 @@ class OptionsFragment : Fragment() {
 
         createSpinnerWithAdapter()
 
-        createSwitchListener()
 
-        createSpinnerListener()
 
+    }
+
+    fun createRadioGroupListener(){
+
+        binding.timeRd.setOnCheckedChangeListener { buttonView, checkedRbId ->
+            viewModel.setTimeAndCurrencyToOptionsData(checkedRadioButton(checkedRbId))
+        }
+    }
+
+    /*
+    * 0 -> Minutes
+    * 1 -> Days
+    * 2 -> Hours*/
+    fun checkedRadioButton(checkedRadioButtonId: Int): TimeAndCurrency = when(checkedRadioButtonId){
+        binding.radioButton1.id -> TimeAndCurrency(45L, 0)
+        binding.radioButton2.id -> TimeAndCurrency(2L, 2)
+        binding.radioButton3.id -> TimeAndCurrency(4L, 2)
+        binding.radioButton4.id -> TimeAndCurrency(8L, 2)
+        binding.radioButton5.id -> TimeAndCurrency(12L, 2)
+        binding.radioButton6.id -> TimeAndCurrency(1L, 1)
+        else -> TimeAndCurrency(30L, 0)
+
+    }
+
+    fun setDefaultTimeRadioGroup(time: Long) = when(time){
+        45L -> binding.radioButton1.isChecked = true
+        2L -> binding.radioButton2.isChecked = true
+        4L -> binding.radioButton3.isChecked = true
+        8L -> binding.radioButton4.isChecked = true
+        12L -> binding.radioButton5.isChecked = true
+        1L -> binding.radioButton6.isChecked = true
+        else -> binding.radioButton1.isChecked = true
     }
 
     fun createSwitchListener(){
@@ -71,8 +101,6 @@ class OptionsFragment : Fragment() {
 
                         scheduleWorker()
 
-
-
                 }else{
                     showToast("You need to select an album")
                     binding.activateSetWallpaperSwitch.isChecked = false
@@ -81,7 +109,7 @@ class OptionsFragment : Fragment() {
                 WorkManager.getInstance().cancelUniqueWork(MainActivity.WORKER_NAME)//este funciona
                 showToast("Change Wallpaper Process is OFF")
             }
-
+            Log.i("EL BOOLEAN DA", "${binding.activateSetWallpaperSwitch.isChecked}")
             viewModel.optionsData.value!!.isSelected = binding.activateSetWallpaperSwitch.isChecked
         }
     }
@@ -92,10 +120,6 @@ class OptionsFragment : Fragment() {
                 val albumSelected = parent?.selectedItem.toString().trim()
                 viewModel.getAlbumByName(albumSelected)//this method fills the livedata
                 viewModel.optionsData.value!!.selectedAlbum = albumSelected
-
-                //when you select another albun, forces switch button to OFF so the user needs to ON and execute code
-                binding.activateSetWallpaperSwitch.isChecked = false
-                viewModel.optionsData.value!!.isSelected = binding.activateSetWallpaperSwitch.isChecked
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -147,6 +171,13 @@ class OptionsFragment : Fragment() {
         viewModel.optionsData.observe(viewLifecycleOwner, { optionsData ->
             binding.activateSetWallpaperSwitch.isChecked = optionsData.isSelected
             setDbOptionAtPositionInSpinner(optionsData)
+            setDefaultTimeRadioGroup(optionsData.time)
+            createSwitchListener()
+
+            createSpinnerListener()
+
+            createRadioGroupListener()
+
         })
 
         //set radio buttons default value

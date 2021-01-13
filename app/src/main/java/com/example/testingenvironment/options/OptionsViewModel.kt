@@ -48,6 +48,11 @@ class OptionsViewModel(
         //"Create an object in the viewmodel to hold the state of the options and save it into the database"
     }
 
+    fun setTimeAndCurrencyToOptionsData(timeAndCurrency: TimeAndCurrency){
+        _optionsData.value?.time = timeAndCurrency.time
+        _optionsData.value?.timeUnitInt = timeAndCurrency.currency
+    }
+
     private fun saveOptionsDataFirstTime(){
         ioScope.launch {
             val optionsData = dataSource.getOptionsDataById(1)
@@ -59,7 +64,7 @@ class OptionsViewModel(
                         0L,
                         false,
                         "Empty",
-                        20L,
+                        45L,
                         0
                     )
                 )

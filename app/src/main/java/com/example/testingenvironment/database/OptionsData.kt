@@ -14,7 +14,7 @@ data class OptionsData (
     @ColumnInfo(name = "selected_album")
     var selectedAlbum: String,
     @ColumnInfo(name = "time")
-    val time: Long, //in num. It can be 20 because its minutes or 1 because its days
+    var time: Long, //in num. It can be 20 because its minutes or 1 because its days
     @ColumnInfo(name = "time_unit_int")
-    val timeUnitInt: Int //DAY -> 1, HOUR -> 2, MINUTE -> 0
+    var timeUnitInt: Int //DAY -> 1, HOUR -> 2, MINUTE -> 0
 )

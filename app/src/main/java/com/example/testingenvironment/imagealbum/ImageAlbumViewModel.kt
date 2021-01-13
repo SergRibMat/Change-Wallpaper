@@ -56,7 +56,6 @@ class ImageAlbumViewModel(
     init {
         _navigateToImageList.value = null
         loadAlbumWithImagesIntoList()
-
     }
 
 
@@ -65,8 +64,6 @@ class ImageAlbumViewModel(
         oiScope.launch {
             _albumWithImageList.postValue(dataSource.getAllAlbumWithImage().toList())
         }
-
-
     }
 
     fun saveAlbumIntoDatabase(albumName: String){

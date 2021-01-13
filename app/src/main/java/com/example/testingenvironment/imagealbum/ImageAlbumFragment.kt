@@ -79,8 +79,6 @@ class ImageAlbumFragment : Fragment() {
         loadAdapter()
 
         setHasOptionsMenu(true)
-
-        Log.i("ImageAlbumFragment", "ImageAlbumFragment")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -164,8 +162,11 @@ class ImageAlbumFragment : Fragment() {
             val name = etFolder.text.toString().trim { it <= ' ' }
             if (name.isNotEmpty()) {
                 if (!viewModel.albumAlreadyExists(name)){
-                    viewModel.saveAlbumIntoDatabase(name)
-                    viewModel.loadAlbumWithImagesIntoList()
+                    uiScope.launch {
+                        viewModel.saveAlbumIntoDatabase(name)
+                        viewModel.loadAlbumWithImagesIntoList()
+                        loadAdapter()
+                    }
                 }else{
                     showToast("Album already exists")
                 }
