@@ -49,7 +49,7 @@ class ImageAlbumViewModel(
 
     //coroutines
     private var viewModelJob = Job()
-    private val oiScope = CoroutineScope(Dispatchers.IO +  viewModelJob)
+    private val oiScope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
 
 
@@ -172,8 +172,9 @@ class ImageAlbumViewModel(
     }
 
     fun albumAlreadyExists(name: String): Boolean{
+
         _albumWithImageList.value?.forEach {
-            if ( it.album.name == name){
+            if (it.album.name.equals(name, ignoreCase = true)) {
                 return true
             }
         }
