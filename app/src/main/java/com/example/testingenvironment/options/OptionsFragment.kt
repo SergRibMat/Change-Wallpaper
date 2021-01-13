@@ -49,7 +49,6 @@ class OptionsFragment : Fragment() {
 
         viewModel.album.observe(viewLifecycleOwner, { album ->
             viewModel.assigPeriodicWorkRequestToLiveData()
-            //binding.activateSetWallpaperSwitch.isChecked = false
             Log.i("OptionsFragment.", "assigPeriodicWorkRequestToLiveData()")
         })
 
@@ -94,10 +93,9 @@ class OptionsFragment : Fragment() {
                 viewModel.getAlbumByName(albumSelected)//this method fills the livedata
                 viewModel.optionsData.value!!.selectedAlbum = albumSelected
 
-                //Each time you change album, it forces the switch button to off so the user clicks it again and recreate the process
+                //when you select another albun, forces switch button to OFF so the user needs to ON and execute code
                 binding.activateSetWallpaperSwitch.isChecked = false
                 viewModel.optionsData.value!!.isSelected = binding.activateSetWallpaperSwitch.isChecked
-                //if album changed, put switch to false
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
