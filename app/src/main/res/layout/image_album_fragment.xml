@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/vector_add_48"
                 app:backgroundTint="@color/colorAccent"
-                android:layout_gravity="bottom|end"
+                android:layout_gravity="bottom|start"
                 android:layout_margin="16dp"
                 android:id="@+id/add_album_btn"
                 app:elevation= "6dp"

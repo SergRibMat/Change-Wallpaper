@@ -1,6 +1,7 @@
 package com.example.testingenvironment.options
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +18,7 @@ import com.example.testingenvironment.MainActivity
 import com.example.testingenvironment.database.ImageUriDatabase
 import com.example.testingenvironment.database.OptionsData
 import com.example.testingenvironment.databinding.OptionsFragmentBinding
+
 
 class OptionsFragment : Fragment() {
 
@@ -101,6 +104,7 @@ class OptionsFragment : Fragment() {
 
                         scheduleWorker()
                         enableOptionViews(false)
+                    showToast("Change Wallpaper Process is ON")
 
                 }else{
                     showToast("You need to select an album")
@@ -119,6 +123,8 @@ class OptionsFragment : Fragment() {
     fun createSpinnerListener(){
         binding.albumListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                (parent?.getChildAt(0) as TextView).setTextColor(Color.BLUE)
+                (parent?.getChildAt(0) as TextView).textSize = 20f
                 val albumSelected = parent?.selectedItem.toString().trim()
                 viewModel.getAlbumByName(albumSelected)//this method fills the livedata
                 viewModel.optionsData.value!!.selectedAlbum = albumSelected
@@ -150,7 +156,7 @@ class OptionsFragment : Fragment() {
         binding.albumListSpinner.setSelection(itemPosition, true)
     }
 
-    fun declareObserverRefreshAdapter(adapter: ArrayAdapter<String> ){
+    fun declareObserverRefreshAdapter(adapter: ArrayAdapter<String>){
         viewModel.albumList.observe(viewLifecycleOwner, {
             adapter.addAll(viewModel.albumNameList())
         })
@@ -161,7 +167,8 @@ class OptionsFragment : Fragment() {
             WorkManager.getInstance().enqueueUniquePeriodicWork(
                 MainActivity.WORKER_NAME,//just the reference to the variable in the companion object
                 ExistingPeriodicWorkPolicy.KEEP,//what to do when there are 2 request enqueued of the same work
-                viewModel.periodicWorkRequest.value!!)
+                viewModel.periodicWorkRequest.value!!
+            )
             showToast("Change Wallpaper Process is ON")
         }
 
@@ -174,6 +181,7 @@ class OptionsFragment : Fragment() {
             binding.activateSetWallpaperSwitch.isChecked = optionsData.isSelected
             setDbOptionAtPositionInSpinner(optionsData)
             setDefaultTimeRadioGroup(optionsData.time)
+            enableOptionViews(!optionsData.isSelected)
             createSwitchListener()
 
             createSpinnerListener()
