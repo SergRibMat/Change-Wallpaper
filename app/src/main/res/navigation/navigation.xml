@@ -7,14 +7,14 @@
 
     <fragment android:id="@+id/detailFragment"
               android:name="com.example.testingenvironment.detail.DetailFragment"
-              android:label="Detail Fragment"
+              android:label="Detail"
               tools:layout="@layout/detail_fragment"
     >
         <argument android:name="ImageUri" app:argType="com.example.testingenvironment.database.ImageUri"/>
     </fragment>
     <fragment android:id="@+id/imageAlbumFragment"
               android:name="com.example.testingenvironment.imagealbum.ImageAlbumFragment"
-              android:label="Image Album Fragment"
+              android:label="Album List"
               tools:layout="@layout/image_album_fragment"
     >
         <action android:id="@+id/action_imageAlbumFragment_to_imageListFragment"
@@ -24,7 +24,7 @@
     </fragment>
     <fragment android:id="@+id/imageListFragment"
               android:name="com.example.testingenvironment.imagelist.ImageListFragment"
-              android:label="Image List Fragment"
+              android:label="Image List"
               tools:layout="@layout/image_list_fragment"
     >
         <action android:id="@+id/action_imageListFragment_to_detailFragment" app:destination="@id/detailFragment"/>
@@ -32,14 +32,14 @@
     </fragment>
     <fragment android:id="@+id/optionsFragment"
               android:name="com.example.testingenvironment.options.OptionsFragment"
-              android:label="Options Fragment"
+              android:label="Options"
               tools:layout="@layout/options_fragment"
     >
     </fragment>
 
     <fragment android:id="@+id/aboutFragment"
               android:name="com.example.testingenvironment.about.AboutFragment"
-              android:label="About Fragment"
+              android:label="About"
               tools:layout="@layout/fragment_about"
     >
 

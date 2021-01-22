@@ -14,7 +14,6 @@
                 android:text="- We save your images in this App, but will not take any of your personal info or share anything that belongs to you. \n - If your album has less than 2 image, it will not be reproduced. \n -You can make a single image your Wallpaper by going to the single image. \n - To open an album, click in the name, if you want to delete or remane an album, hold the album's name."
                 android:textSize="30sp"
                 android:textColor="#000000"/>
-
     </ScrollView>
 
 </FrameLayout>
