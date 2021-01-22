@@ -202,4 +202,10 @@ class ExampleInstrumentedTest {
         val obj = imageUriDao.getOptionsDataById(1L)
         assertEquals(false, obj.isSelected)
     }
+
+    @Test
+    fun getImagePathsFromAlbumTest(){//OK
+        val list = imageUriDao.getImagePathsFromAlbum(1)
+        assertEquals("Path", list[0])
+    }
 }

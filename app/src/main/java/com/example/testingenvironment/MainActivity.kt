@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         fun applicationContext() : Context {
             return instance!!.applicationContext
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

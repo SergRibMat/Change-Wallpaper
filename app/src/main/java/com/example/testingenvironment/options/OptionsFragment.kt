@@ -1,7 +1,9 @@
 package com.example.testingenvironment.options
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -53,13 +54,12 @@ class OptionsFragment : Fragment() {
         viewModel.album.observe(viewLifecycleOwner, { album ->
             viewModel.assigPeriodicWorkRequestToLiveData()
             Log.i("OptionsFragment.", "assigPeriodicWorkRequestToLiveData()")
+            showToast("El album ha cambiado a ${album.name}")
         })
 
         setDefaultValuesToUI()
 
         createSpinnerWithAdapter()
-
-
 
     }
 
@@ -103,8 +103,10 @@ class OptionsFragment : Fragment() {
                 if(albumName != null && albumName != "Empty"){
 
                         scheduleWorker()
+
                         enableOptionViews(false)
                     showToast("Change Wallpaper Process is ON")
+                    Log.i("Contenido de optionsData", viewModel.getOptionsDataString())
 
                 }else{
                     showToast("You need to select an album")
@@ -123,8 +125,6 @@ class OptionsFragment : Fragment() {
     fun createSpinnerListener(){
         binding.albumListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                (parent?.getChildAt(0) as TextView).setTextColor(Color.BLUE)
-                (parent?.getChildAt(0) as TextView).textSize = 20f
                 val albumSelected = parent?.selectedItem.toString().trim()
                 viewModel.getAlbumByName(albumSelected)//this method fills the livedata
                 viewModel.optionsData.value!!.selectedAlbum = albumSelected
@@ -220,7 +220,5 @@ class OptionsFragment : Fragment() {
         binding.radioButton6.isEnabled = condition
 
     }
-
-
 
 }

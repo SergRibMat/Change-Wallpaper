@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Album::class, ImageUri::class, OptionsData::class], version = 3,  exportSchema = false)
+@Database(entities = [Album::class, ImageUri::class, OptionsData::class], version = 4,  exportSchema = false)
 abstract class ImageUriDatabase : RoomDatabase(){
 
     abstract val imageUriDatabaseDao: ImageUriDatabaseDao

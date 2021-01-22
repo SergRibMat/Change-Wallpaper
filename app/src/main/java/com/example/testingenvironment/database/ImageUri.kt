@@ -9,7 +9,7 @@ import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-@Entity(tableName = "ImagesUri",
+@Entity(tableName = "Images_uri",
     foreignKeys = [ForeignKey(
         entity = Album::class,
         parentColumns = arrayOf("albumGroup"),

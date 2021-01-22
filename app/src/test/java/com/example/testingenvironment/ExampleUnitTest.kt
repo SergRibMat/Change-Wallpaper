@@ -31,6 +31,26 @@ class ExampleUnitTest {
         }
     }
 
+    @Test
+    fun repetitionIntervalLongTest(){
+        val milis: Long = repetitionIntervalLong()
+        assertEquals(86400000L, milis)
+    }
+
+    fun timeChoice(): Long = 1L
+
+    fun repetitionIntervalLong(): Long = (oneMinuteLong() * timeChoice()) * getTimeUnitToMultiply(1)
+
+
+    fun getTimeUnitToMultiply(timeUnitInt: Int): Long = when(timeUnitInt) {
+        0   -> 1L //minutes
+        1   -> 60L * 24L //days
+        2   -> 60L //hours
+        else -> 60L //hours
+    }
+
+    fun oneMinuteLong(): Long = 60000L
+
     fun getTimeUnit(timeUnitString: String) = when(timeUnitString) {
         "Minutes"   -> TimeUnit.MINUTES
         "Days"      -> TimeUnit.DAYS

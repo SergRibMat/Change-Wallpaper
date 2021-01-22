@@ -48,6 +48,9 @@ class OptionsViewModel(
         //"Create an object in the viewmodel to hold the state of the options and save it into the database"
     }
 
+    fun getOptionsDataString(): String = "SwitchButton = ${optionsData.value!!.isSelected} album = ${optionsData.value!!.selectedAlbum}" +
+            " Time = ${optionsData.value!!.time}"
+
     fun setTimeAndCurrencyToOptionsData(timeAndCurrency: TimeAndCurrency){
         _optionsData.value?.time = timeAndCurrency.time
         _optionsData.value?.timeUnitInt = timeAndCurrency.currency
@@ -129,14 +132,16 @@ class OptionsViewModel(
     }
 
     fun getTimeUnit(timeUnitInt: Int) = when(timeUnitInt) {
-        0   -> TimeUnit.MINUTES
-        1   -> TimeUnit.DAYS
-        2   -> TimeUnit.HOURS
-        else -> TimeUnit.HOURS
+        0   -> TimeUnit.MINUTES //*1
+        1   -> TimeUnit.DAYS //*60 * 24
+        2   -> TimeUnit.HOURS//*60
+        else -> TimeUnit.HOURS//*60
     }
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
     }
+
+
 }

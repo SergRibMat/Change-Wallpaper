@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -91,8 +92,22 @@ class ImageAlbumViewModel(
 
     fun deleteAlbum(albumGroup: Int){
         oiScope.launch {
+            //aqui eliminar las imagenes una a una
+            deleteFileImages(albumGroup)
             dataSource.deleteAlbumByAlbumGroup(albumGroup)
             loadAlbumsIntoList()
+        }
+    }
+
+    suspend fun deleteFileImages(albumGroup: Int){
+        val imagePathList = dataSource.getImagePathsFromAlbum(albumGroup)
+        Log.i("ImageAlbumViewModel", "el lenght es ${imagePathList.size}")
+        imagePathList.forEach { pathToImage ->
+            if (File(pathToImage).delete()) {
+                Log.i("ImageAlbumViewModel", "Se ha borrado el archivo con path = $pathToImage")
+            }else{
+                Log.i("ImageAlbumViewModel", "La imagen no se ha borrado")
+            }
         }
     }
 

@@ -49,6 +49,10 @@ class FakeImageUriDatabaseDao : ImageUriDatabaseDao{
         TODO("Not yet implemented")
     }
 
+    override fun getImagePathsFromAlbum(albumGroup: Int): List<String> {
+        TODO("Not yet implemented")
+    }
+
     override fun getOptionsDataById(id: Long): OptionsData {
         TODO("Not yet implemented")
     }

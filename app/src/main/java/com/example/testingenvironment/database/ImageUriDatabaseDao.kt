@@ -29,6 +29,11 @@ interface ImageUriDatabaseDao {
         }
     }
 
+
+    @Query("SELECT path_to_image FROM images_uri WHERE albumGroup = :albumGroup")
+    fun getImagePathsFromAlbum(albumGroup: Int): List<String>
+
+
     @Query("SELECT * FROM options_data WHERE id = :id")
     fun getOptionsDataById(id: Long): OptionsData
 
@@ -41,10 +46,10 @@ interface ImageUriDatabaseDao {
     @Query("DELETE FROM album WHERE albumGroup = :albumGroup")
     fun deleteAlbumByAlbumGroup(albumGroup: Int)
 
-    @Query("DELETE FROM ImagesUri WHERE id = :id")
+    @Query("DELETE FROM images_uri WHERE id = :id")
     fun deleteImageUriById(id: Int)
 
-    @Query("SELECT * FROM ImagesUri")
+    @Query("SELECT * FROM images_uri")
     fun getAllImageUri(): List<ImageUri>
 
     @Delete
@@ -56,10 +61,10 @@ interface ImageUriDatabaseDao {
     @Query("SELECT * FROM album WHERE albumGroup = :id")
     fun getAlbumById(id: Int): Album
 
-    @Query("SELECT * FROM ImagesUri WHERE id = :id")
+    @Query("SELECT * FROM images_uri WHERE id = :id")
     fun getImageUriById(id: Int): ImageUri
 
-    @Query("SELECT * FROM ImagesUri WHERE albumGroup = :albumGroup")
+    @Query("SELECT * FROM images_uri WHERE albumGroup = :albumGroup")
     fun getImagesFromAlbum(albumGroup: Int): List<ImageUri>
 
     @Query("SELECT * FROM  album")

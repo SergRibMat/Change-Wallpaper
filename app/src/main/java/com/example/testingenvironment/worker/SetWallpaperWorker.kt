@@ -19,14 +19,14 @@ class SetWallpaperWorker (appContext: Context, params: WorkerParameters):
         //reference to the data sourse
         val albumGroup = inputData.getString("album")
         val dataSource = ImageUriDatabase.getInstance(applicationContext).imageUriDatabaseDao
-        Log.i("SetWallpaperWorker", "Album id =  $albumGroup")
+        //Log.i("SetWallpaperWorker", "Album id =  $albumGroup")
         val albumList =dataSource.getImagesFromAlbum(albumGroup!!.toInt())
 
         try{
             val albumSize = albumList.size
 
             if (!albumBiggerThan(albumSize, 2)){
-                Log.i("SetWallpaperWorker", "size of album $albumSize and it wasn't executed" )
+                //Log.i("SetWallpaperWorker", "size of album $albumSize and it wasn't executed" )
                 return Result.success()
             }
             val imageUriObject = dataSource.getImageUriById(generateRandomNumber(albumSize))
@@ -34,13 +34,13 @@ class SetWallpaperWorker (appContext: Context, params: WorkerParameters):
             val wallpaperManager: WallpaperManager = WallpaperManager.getInstance(applicationContext)
             if (wallpaperManager.isSetWallpaperAllowed) {
                 wallpaperManager.setBitmap(getImageWithGlide(imageUriObject.pathToImage))
-                Log.i("SetWallpaperWorker", "Changed wallpaper image")
+                //Log.i("SetWallpaperWorker", "Changed wallpaper image")
             }
-            Log.i("SetWallpaperWorker", "Executed success")
+            //Log.i("SetWallpaperWorker", "Executed success")
 
             return Result.success()
         }catch (e: Exception){
-            Log.i("SetWallpaperWorker", "Executed failure Exception")
+            //Log.i("SetWallpaperWorker", "Executed failure Exception")
             return Result.failure()
         }
 
@@ -58,9 +58,6 @@ class SetWallpaperWorker (appContext: Context, params: WorkerParameters):
     }
 
     private fun albumBiggerThan(albumSize: Int, minimum: Int): Boolean = albumSize > minimum
-
-
-    private fun getAlbumSizeAsInt(): Int = inputData.getString("size").toString().toInt()
 
     private fun generateRandomNumber(end: Int): Int = (1..end).random()
 
