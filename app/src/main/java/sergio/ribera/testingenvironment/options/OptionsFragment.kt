@@ -50,8 +50,6 @@ class OptionsFragment : Fragment() {
 
         viewModel.album.observe(viewLifecycleOwner, { album ->
             viewModel.assigPeriodicWorkRequestToLiveData()
-            Log.i("OptionsFragment.", "assigPeriodicWorkRequestToLiveData()")
-            showToast("El album ha cambiado a ${album.name}")
         })
 
         setDefaultValuesToUI()
@@ -103,7 +101,6 @@ class OptionsFragment : Fragment() {
 
                         enableOptionViews(false)
                     showToast("Change Wallpaper Process is ON")
-                    Log.i("Contenido de optionsData", viewModel.getOptionsDataString())
 
                 }else{
                     showToast("You need to select an album")
@@ -114,7 +111,6 @@ class OptionsFragment : Fragment() {
                 showToast("Change Wallpaper Process is OFF")
                 enableOptionViews(true)
             }
-            Log.i("EL BOOLEAN DA", "${binding.activateSetWallpaperSwitch.isChecked}")
             viewModel.optionsData.value!!.isSelected = binding.activateSetWallpaperSwitch.isChecked
         }
     }

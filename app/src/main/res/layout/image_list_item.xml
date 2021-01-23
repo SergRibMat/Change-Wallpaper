@@ -27,6 +27,7 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:padding="2dp"
+            android:layout_gravity="center"
             android:onClick="@{() -> clickListener.onClick(imageUri)}"
             app:imageUri="@{imageUri.pathToImage}"/>
 </FrameLayout>
