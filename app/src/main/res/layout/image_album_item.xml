@@ -7,13 +7,13 @@
     <data>
         <variable
                 name="clickListener"
-                type="com.example.testingenvironment.imagealbum.AlbumListener"/>
+                type="sergio.ribera.testingenvironment.imagealbum.AlbumListener"/>
         <variable
                 name="albumWithImages"
-                type="com.example.testingenvironment.database.AlbumWithImages"/>
+                type="sergio.ribera.testingenvironment.database.AlbumWithImages"/>
         <variable
                 name="saveImagesClickListener"
-                type="com.example.testingenvironment.imagealbum.AlbumListener"/>
+                type="sergio.ribera.testingenvironment.imagealbum.AlbumListener"/>
 
     </data>
     <LinearLayout

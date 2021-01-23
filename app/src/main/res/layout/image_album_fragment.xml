@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.example.testingenvironment.imagealbum.ImageAlbumViewModel"/>
+                type="sergio.ribera.testingenvironment.imagealbum.ImageAlbumViewModel"/>
     </data>
 
 

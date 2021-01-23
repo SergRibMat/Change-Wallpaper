@@ -7,7 +7,7 @@
     <data>
         <variable
                 name="viewModel"
-                type="com.example.testingenvironment.imagelist.ImageListViewModel"/>
+                type="sergio.ribera.testingenvironment.imagelist.ImageListViewModel"/>
     </data>
 
 <FrameLayout

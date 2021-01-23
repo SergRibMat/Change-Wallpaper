@@ -6,7 +6,7 @@
     <data>
         <variable
             name="imageUri"
-            type="com.example.testingenvironment.database.ImageUri" />
+            type="sergio.ribera.testingenvironment.database.ImageUri" />
     </data>
 
 <FrameLayout

@@ -6,14 +6,14 @@
             app:startDestination="@id/imageAlbumFragment">
 
     <fragment android:id="@+id/detailFragment"
-              android:name="com.example.testingenvironment.detail.DetailFragment"
+              android:name="sergio.ribera.testingenvironment.detail.DetailFragment"
               android:label="Detail"
               tools:layout="@layout/detail_fragment"
     >
-        <argument android:name="ImageUri" app:argType="com.example.testingenvironment.database.ImageUri"/>
+        <argument android:name="ImageUri" app:argType="sergio.ribera.testingenvironment.database.ImageUri"/>
     </fragment>
     <fragment android:id="@+id/imageAlbumFragment"
-              android:name="com.example.testingenvironment.imagealbum.ImageAlbumFragment"
+              android:name="sergio.ribera.testingenvironment.imagealbum.ImageAlbumFragment"
               android:label="Album List"
               tools:layout="@layout/image_album_fragment"
     >
@@ -23,22 +23,22 @@
 
     </fragment>
     <fragment android:id="@+id/imageListFragment"
-              android:name="com.example.testingenvironment.imagelist.ImageListFragment"
+              android:name="sergio.ribera.testingenvironment.imagelist.ImageListFragment"
               android:label="Image List"
               tools:layout="@layout/image_list_fragment"
     >
         <action android:id="@+id/action_imageListFragment_to_detailFragment" app:destination="@id/detailFragment"/>
-        <argument android:name="album" app:argType="com.example.testingenvironment.database.Album"/>
+        <argument android:name="album" app:argType="sergio.ribera.testingenvironment.database.Album"/>
     </fragment>
     <fragment android:id="@+id/optionsFragment"
-              android:name="com.example.testingenvironment.options.OptionsFragment"
+              android:name="sergio.ribera.testingenvironment.options.OptionsFragment"
               android:label="Options"
               tools:layout="@layout/options_fragment"
     >
     </fragment>
 
     <fragment android:id="@+id/aboutFragment"
-              android:name="com.example.testingenvironment.about.AboutFragment"
+              android:name="sergio.ribera.testingenvironment.about.AboutFragment"
               android:label="About"
               tools:layout="@layout/fragment_about"
     >

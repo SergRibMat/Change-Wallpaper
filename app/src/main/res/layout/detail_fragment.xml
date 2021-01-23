@@ -6,11 +6,11 @@
     <data>
         <variable
                 name="imageUri"
-                type="com.example.testingenvironment.database.ImageUri"/>
+                type="sergio.ribera.testingenvironment.database.ImageUri"/>
 
         <variable
                 name="clickListener"
-                type="com.example.testingenvironment.imagelist.ImageUriClickListener"/>
+                type="sergio.ribera.testingenvironment.imagelist.ImageUriClickListener"/>
 
     </data>
 
