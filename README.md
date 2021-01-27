@@ -26,6 +26,7 @@ Project is created with:
 * Dexter Permissions library
 * Databinding
 * Google Material 1.2.1
+* MVVM Architecture
 	
 ## Setup
 
@@ -40,7 +41,9 @@ Being reviewed by Google.
 
 ## Illustration
 
-![clickNextButton](https://user-images.githubusercontent.com/54866393/105999398-ec992400-60ad-11eb-9808-599300a8b590.gif)
+![CreateAlbumInsertImages](https://user-images.githubusercontent.com/54866393/106037128-8aa0e480-60d6-11eb-9e2f-be599b19a32c.gif)
+
+![InitChangeWallpaper](https://user-images.githubusercontent.com/54866393/106037136-8d9bd500-60d6-11eb-9860-c35654b8cec5.gif)
 
 ## Project status 
 
