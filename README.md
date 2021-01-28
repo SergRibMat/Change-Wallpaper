@@ -30,6 +30,7 @@ Project is created with:
 * Databinding
 * Google Material 1.2.1
 * MVVM Architecture
+* Safeargs
 	
 ## Setup
 
