@@ -10,6 +10,9 @@
 ## Summary
 Big project having as objective the use of several Android features, such as Navigation, ROOM database, Work Manager... 
 Using them all together to build a Solid and Useful Android Application.
+
+What the App does is, you can create different albums of images and use an album to change the Wallpaper's device every X time or choose a single image and
+change your Wallpaper to that image.
 	
 ## Technologies
 
